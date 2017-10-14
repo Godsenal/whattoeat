@@ -40137,7 +40137,6 @@ var Result = function (_Component) {
 
       var status = i == MAX_RANDOM - 1 ? 'SUCCESS' : 'WAITING';
       var random = i == MAX_RANDOM - 1 ? Math.floor(Math.random() * (match.length - 1)) : i % match.length;
-      console.log(random);
       var intervalId = setTimeout(function () {
         _this2.props.setFoodResult(status, match[random]);
       }, 200 * i);
