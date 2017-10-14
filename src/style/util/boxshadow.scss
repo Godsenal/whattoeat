@@ -1,0 +1,9 @@
+@mixin boxShadowBottomThinLighter() {
+  box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+}
+
+@mixin boxShadowBottomRightThinLighter(){
+  -webkit-box-shadow: 17px 19px 30px -16px rgba(0,0,0,0.5);
+  -moz-box-shadow: 17px 19px 30px -16px rgba(0,0,0,0.5);
+  box-shadow: 17px 19px 30px -16px rgba(0,0,0,0.5);
+}

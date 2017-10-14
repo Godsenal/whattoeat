@@ -1,0 +1,22 @@
+@import './util/boxshadow.scss';
+@import './util/color.scss';
+@import './util/flex';
+.headerContainer{
+  position: relative;
+  width: 100%;
+  height: 60px;
+  top: 0;
+  align-items: center;
+  @include flexbox;
+}
+
+.headerInnerContainer{
+  padding: 10px;
+  color: #24292e;
+  font-size: 1.8em;
+  font-family: 'Hanna','Ubuntu',sans-serif;
+  font-weight: 400;
+  text-align: center;
+  @include flex-1-1;
+  
+}

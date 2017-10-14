@@ -1,0 +1,57 @@
+@import 'util/button.scss';
+@import 'util/color.scss';
+@import 'util/boxshadow.scss';
+.container{
+  width: 95%;
+  box-sizing: border-box;
+  padding: 15px;
+  margin: auto;
+  text-align: center;
+}
+
+.startButton{
+  width: 30%;
+  padding: 20px;
+  margin: auto;
+  position: relative;
+  font-family: "Hanna", "Ubuntu", sans-serif;
+  @include boxShadowBottomRightThinLighter;
+  @media screen and (min-width: 1000px){
+    font-size: 32px;
+  }
+  @media screen and (max-width: 999px){
+    font-size: 26px;
+  }
+  @include button-fill($light-red);
+  
+  transition: padding 0.3s ease-in-out, bottom 0.3s ease-in-out;
+}
+
+.startButton-in-active{
+  padding-bottom: 100px;
+  cursor: auto;
+}
+
+.result{
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  height: 100px;
+  padding: 20px;
+  opacity: 0;
+  box-sizing: border-box;
+  margin: 0 -20px;
+  font-weight: 600;
+  font-family: "Hanna", "Ubuntu", sans-serif;
+  @media screen and (min-width: 1000px){
+    font-size: 36px;
+  }
+  @media screen and (max-width: 999px){
+    font-size: 32px;
+  }
+  color: $dark-yellow;
+}
+
+.result-in-active{
+  opacity: 1;
+}

@@ -1,0 +1,46 @@
+@import './util/button.scss';
+@import './util/color.scss';
+.tagListInnerContainer{
+  @media screen and (min-width: 1000px){
+    width: 70%;
+  }
+  @media screen and (max-width: 999px){
+    width: 95%;
+  }
+  margin: 30px auto;
+  text-align: center;
+  box-sizing: border-box;
+}
+.tag{
+  padding: 10px;
+  margin: 0.3em;
+  display: inline-block;
+  @media screen and (min-width: 1000px){
+    font-size: 18px;
+    width: 10%;
+  }
+  @media screen and (max-width: 999px){
+    font-size: 14px;
+    width: 20%;
+  }
+  font-family: "Jeju Gothic", "Ubuntu", sans-serif;
+  
+  
+}
+.normalTag{
+  @extend .tag;
+  border-radius: 20px;
+  @include button-border($light-blue);
+  -webkit-transition: width .3s ease-in-out;
+  transition: width .3s ease-in-out;
+    
+}
+.activeTag{
+  @extend .tag;
+  border-radius: 20px;
+  @include button-border-active($light-blue);
+  color: white;
+  -webkit-transition: width .3s ease-in-out;
+  transition: width .3s ease-in-out;
+}
+
