@@ -1,0 +1,67 @@
+@import './util/centerer.scss';
+@import './util/color.scss';
+@import './util/boxshadow.scss';
+@import './util/button.scss';
+.tagFinderContainer{
+  text-align: center;
+  width: 100%;
+  margin: 20px auto;
+}
+
+.tagFinderContainer input{
+  width: 200px;
+  padding: 5px;
+  z-index: 3;
+  text-align: center;
+  background: transparent;
+  line-height: 1.5;
+  vertical-align: baseline;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: 0;
+  font-size: 1.2em;
+  @include boxShadowBottomRightThinLighter;
+  -webkit-appearance: none;
+}
+
+.tagFinderButton{
+  box-sizing: border-box;
+  width: 36px;
+  height: 36px;
+  text-align: center;
+  padding: 5px;
+  font-size: 16px;
+  margin: auto;
+  margin-bottom: 0px;
+  border-radius: 36px;
+  @include button-fill($light-blue);
+
+  transition: margin-bottom 0.3s ease-in-out;
+}
+
+.tagFinderButton-inactive{
+  margin-bottom: 20px;
+}
+
+.tagFinderButtonIcon{
+  transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.tagFinderButtonIcon-rotate{
+  color: $dark-yellow;
+  transform: rotate(45deg);
+}
+.tagFinderInput{
+  width: 0px;
+  visibility: hidden;
+  padding: 0px;
+  max-height: 0px;
+  transition: max-height 0.3s ease-in-out;
+}
+.tagFinderInput-active{
+  width: 240px;
+  margin: 0px auto;
+  visibility: visible;
+  max-height: 100px;
+  
+}

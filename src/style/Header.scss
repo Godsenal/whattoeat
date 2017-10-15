@@ -13,7 +13,12 @@
 .headerInnerContainer{
   padding: 10px;
   color: #24292e;
-  font-size: 1.8em;
+  @media screen and (min-width: 1000px){
+    font-size: 36px;
+  }
+  @media screen and (max-width: 999px){
+    font-size: 54px;
+  }
   font-family: 'Hanna','Ubuntu',sans-serif;
   font-weight: 400;
   text-align: center;
