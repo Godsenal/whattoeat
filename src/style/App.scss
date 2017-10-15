@@ -34,28 +34,7 @@ body, button, input, select, textarea {
   -moz-osx-font-smoothing: grayscale;
 }
 .mainContainer{
-  @include centerer-with-witdh(100%);
-}
-.tagListContainer{
-  max-height: 500px;
-  transition: max-height 0.3s ease-in-out;
+  height: 100vh;
+  @include centererFlex;
 }
 
-.tagList-inactive{
-  max-height: 0px;
-  overflow: hidden;
-}
-
-.resetTagButton{
-  text-align: center;
-  width: 36px;
-  margin: auto;
-  font-size: 2em;
-  padding: .1rem;
-  margin-top: 1rem;
-  color: $light-red;
-  background-color: $dark-yellow;
-  border-radius: 100px;
-  cursor: pointer;
-  @include button-fill($dark-yellow);
-}

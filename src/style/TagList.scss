@@ -39,8 +39,24 @@
   @extend .tag;
   border-radius: 20px;
   @include button-border-active($light-blue);
-  color: white;
+  color: $dark-yellow;
   -webkit-transition: width .3s ease-in-out;
   transition: width .3s ease-in-out;
 }
-
+.addTag{
+  padding: 10px;
+  margin: 0.3em;
+  display: inline-block;
+  font-family: "Jeju Gothic", "Ubuntu", sans-serif;
+  @media screen and (min-width: 1000px){
+    font-size: 18px;
+    width: 5%;
+  }
+  @media screen and (max-width: 999px){
+    font-size: 14px;
+    width: 10%;
+  }
+  @include button-fill($light-red);
+  border-radius: 20px;
+  color: white;
+}

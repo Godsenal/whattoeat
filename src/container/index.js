@@ -1,3 +1,4 @@
 import App from './App';
-
-export { App };
+import TagPage from './TagPage';
+import ResultPage from './ResultPage';
+export { App, TagPage, ResultPage };

@@ -2,13 +2,15 @@
   cursor: pointer;
   background: $bg;
   color: $color;
-  &:hover {
-    background:darken($bg,8%);
-    transition: all 0.3s ease;
+  @media screen and (min-width: 1000px){
+    &:hover {
+      background:darken($bg,8%);
+      transition: all 0.3s ease;
+    }
+    &:active {
+      background:darken($bg,25%);
+    } 
   }
-  &:active {
-    background:darken($bg,25%);
-  } 
 }
 
 @mixin button-border($color,$bg: white) {
@@ -16,13 +18,15 @@
   background: $bg;
   color: $color;
   border: 1px solid $color;
-  &:hover {
-    background:darken($bg,8%);
-    transition: all 0.3s ease;
+  @media screen and (min-width: 1000px){
+    &:hover {
+      background:darken($bg,8%);
+      transition: all 0.3s ease;
+    }
+    &:active {
+      background:darken($bg,25%);
+    } 
   }
-  &:active {
-    background:darken($bg,25%);
-  } 
 }
 
 @mixin button($border){
@@ -57,22 +61,28 @@
 @mixin button-active($bg){
   background: $bg;
   cursor: pointer;
-  &:hover {
-    background:lighten($bg,8%);
+  @media screen and (min-width: 1000px){
+    &:hover {
+      background:lighten($bg,8%);
+    }
+    &:active {
+      background:lighten($bg,25%);
+    } 
   }
-  &:active {
-    background:lighten($bg,25%);
-  } 
+  
 }
 
 @mixin button-border-active($bg){
   background: $bg;
   border: 1px solid $bg;
   cursor: pointer;
-  &:hover {
-    background:lighten($bg,8%);
+  @media screen and (min-width: 1000px){
+    &:hover {
+      background:lighten($bg,8%);
+    }
+    &:active {
+      background:lighten($bg,25%);
+    } 
   }
-  &:active {
-    background:lighten($bg,25%);
-  } 
+  
 }
