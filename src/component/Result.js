@@ -66,7 +66,6 @@ class Result extends Component {
   setRandom(match,i){
     let status = i==MAX_RANDOM - 1?'SUCCESS':'WAITING';
     let random = i==MAX_RANDOM - 1?Math.floor(Math.random() * (match.length)) : i % match.length;
-    console.log(random);
     let intervalId = setTimeout(()=> {
       this.props.setFoodResult(status,match[random]);
     }, 200 * i);
