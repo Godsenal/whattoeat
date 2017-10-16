@@ -47,7 +47,9 @@ export default class TagFinder extends Component {
     return (
       <div className={cx('tagFinderContainer')}>
         <div className={cx('tagFinderButton',isSearch?'tagFinderButton-inactive':null)} onClick={this.handleButtonClick}>
-          <FaFlus className={cx('tagFinderButtonIcon',isSearch?'tagFinderButtonIcon-rotate':null)}/>
+          <div>
+            <FaFlus className={cx('tagFinderButtonIcon',isSearch?'tagFinderButtonIcon-rotate':null)}/>
+          </div>
         </div>
         <div className={cx('tagFinderInput',isSearch?'tagFinderInput-active':null)}>
           <Autosuggest

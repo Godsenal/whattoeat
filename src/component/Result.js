@@ -30,15 +30,27 @@ class Result extends Component {
       }
       this.props.setFoodResult('INIT');
     }
+    if(this.props.getByTags.status==='WAITING' 
+      && nextProps.getByTags.status ==='SUCCESS'){
+      this.handleGetRandom(nextProps.getByTags.foods);
+    }
   }
   handleStart(){
-    var match = [];
-    const {activeTags} = this.props;
-    for(let i=0; i<data.foods.length; i++){
-      if(arrayContains(activeTags, data.foods[i].tags)){
-        match.push(data.foods[i].name);
-      }
+    this.props.getFoodsByTags(this.props.activeTags);
+  }
+  renderRandom(){
+    const {getByTags} = this.props;
+    var match = getByTags.foods;
+    if(match.length === 0){
+      return <span>다른 태그!</span>;
     }
+    else if(match.length <= 1){
+      this.props.setFoodResult('SUCCESS',match[0]);
+      return;
+    }
+  }
+  handleGetRandom(foods){
+    var match = foods;
     if(match.length === 0){
       this.props.setFoodResult('FAILURE');
       return ;
@@ -53,7 +65,8 @@ class Result extends Component {
   }
   setRandom(match,i){
     let status = i==MAX_RANDOM - 1?'SUCCESS':'WAITING';
-    let random = i==MAX_RANDOM - 1?Math.floor(Math.random() * (match.length - 1)) : i % match.length;
+    let random = i==MAX_RANDOM - 1?Math.floor(Math.random() * (match.length)) : i % match.length;
+    console.log(random);
     let intervalId = setTimeout(()=> {
       this.props.setFoodResult(status,match[random]);
     }, 200 * i);
@@ -67,8 +80,8 @@ class Result extends Component {
     
   }
   render() {
-    const {activeTags, foodResult} = this.props;
-    const {status, name} = foodResult;
+    const {foodResult} = this.props;
+    const {status, food} = foodResult;
     return (
       <div className={cx('container')}>
         <div 
@@ -77,7 +90,7 @@ class Result extends Component {
           <span>{status=='WAITING'?'고르는 중...':status=='FAILURE'?'다른 태그!':status==='INIT'?'골라보자!':'이거다!'}</span>
           {status=='WAITING'||status=='SUCCESS'?
             <div className={cx('result','result-in-active')}>
-              <span>{name}</span>
+              <span>{food.name}</span>
             </div>
             :null
           }
@@ -94,6 +107,9 @@ Result.propTypes = {
   activeTags: PropTypes.array.isRequired,
   setFoodResult: PropTypes.func.isRequired,
   foodResult: PropTypes.object.isRequired,
+  getByTags: PropTypes.object.isRequired,
+
+  getFoodsByTags: PropTypes.func.isRequired,
 };
 
 export default Result;

@@ -19,6 +19,9 @@ class ResultPage extends Component{
     };
   }
   handleToggleModal = () => {
+    if(!this.state.open){
+      this.props.getFoods();
+    }
     this.setState({
       open: !this.state.open,
     });
@@ -28,7 +31,7 @@ class ResultPage extends Component{
   }
   render(){
     const {open} = this.state;
-    const {activeTags, foodResult, setFoodResult} = this.props;
+    const {activeTags, get, getByTags, foodResult, setFoodResult, getFoodsByTags} = this.props;
     return(
       <div>
         {
@@ -40,11 +43,24 @@ class ResultPage extends Component{
         <Result 
           activeTags={activeTags}
           foodResult={foodResult}
-          setFoodResult={setFoodResult}/>
+          getByTags={getByTags}
+          setFoodResult={setFoodResult}
+          getFoodsByTags={getFoodsByTags}/>
         <div className={cx('foodInfoButton')}>
           <a onClick={this.handleToggleModal}>어떤 음식?</a>
         </div>
-        <Modal open={open} handleToggleModal={this.handleToggleModal}/>
+        <Modal 
+          open={open}
+          header={'음식 정보'} 
+          handleToggleModal={this.handleToggleModal}>
+          {
+            get.status === 'SUCCESS'?
+              get.foods.map((food,index)=>{
+                return <div key={index}>{food.name}</div>;
+              })
+              :<div>No Food</div>
+          }
+        </Modal>
         
       </div>
     );
@@ -60,6 +76,9 @@ ResultPage.propTypes = {
   isMobile: PropTypes.bool.isRequired,
   activeTags: PropTypes.array.isRequired,
   foodResult: PropTypes.object.isRequired,
+  get: PropTypes.object.isRequired,
+  getByTags: PropTypes.object.isRequired,
+
   setFoodResult : PropTypes.func.isRequired,
   getFoods: PropTypes.func.isRequired,
   getFoodByName: PropTypes.func.isRequired,
@@ -72,6 +91,8 @@ const mapStateToProps = (state) => {
   return {
     activeTags: state.tag.activeTags,
     foodResult: state.food.result,
+    get: state.food.get,
+    getByTags: state.food.getByTags,
   };
 };
 

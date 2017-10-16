@@ -21,11 +21,11 @@ function action(type, payload = {}) {
   return {type, ...payload}
 }
 */
-export function setFoodResult(status,name='') {
+export function setFoodResult(status,food={}) {
   return{
     type: SET_FOOD_RESULT,
     status,
-    name,
+    food,
   };
 }
 

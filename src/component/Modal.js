@@ -6,32 +6,50 @@ import FaClose from 'react-icons/lib/fa/close';
 import styles from '../style/Modal.scss';
 
 const cx = classNames.bind(styles);
-const blockStyle = {
-  display: 'block'
-};
-const endStyle = {
-  display: 'none'
-};
+
 export default class Modal extends Component {
   constructor(){
     super();
     this.state = {
-      block: false,
+      display: 'none',
+      show: false,
     };
   }
-  
+  componentWillReceiveProps = (nextProps) => {
+    if(nextProps.open){
+      this.setState({
+        display: 'block'
+      });
+      setTimeout(()=>{
+        this.setState({
+          show: true
+        });
+      },10);
+    }
+    else{
+      this.setState({
+        show: false,
+      });
+      setTimeout(()=>{
+        this.setState({
+          display: 'none',
+        });
+      },300); //transition time
+    }
+  }
   render() {
-    const {block} = this.state;
-    const {open, handleToggleModal} = this.props;
+    const {display, show} = this.state;
+    const {handleToggleModal, header, children} = this.props;
+
     return (
-      <div style={!block&&!open?endStyle:blockStyle} className={cx('modalContainer',open?'modalContainer-active':null)} onTransitionEnd={()=>this.setState({block:false})}>
+      <div style={{display}} className={cx('modalContainer',show?'modalContainer-active':null)}>
         <div className={cx('modalInnerContainer')}>
           <div className={cx('modalHeader')}>
-            <div><span>Title</span></div>
-            <a onClick={handleToggleModal}><FaClose /></a>
+            <div><span>{header}</span></div>
+            <a><FaClose onClick={handleToggleModal}/></a>
           </div>
           <div className={cx('modalContent')}>
-            
+            {children}
           </div>
           <div className={cx('modalFooter')}>
             <h1>I am Footer</h1>
@@ -47,5 +65,7 @@ Modal.defaultProps = {
 };
 Modal.propTypes ={
   open: PropTypes.bool.isRequired,
+  header: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
   handleToggleModal: PropTypes.func.isRequired,
 };
