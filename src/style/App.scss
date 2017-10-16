@@ -34,6 +34,7 @@ body, button, input, select, textarea {
   -moz-osx-font-smoothing: grayscale;
 }
 .mainContainer{
+  width: 100%;
   height: 100vh;
   @include centererFlex;
 }

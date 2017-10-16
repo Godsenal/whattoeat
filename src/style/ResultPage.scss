@@ -14,3 +14,18 @@
   cursor: pointer;
   @include button-fill($dark-yellow);
 }
+
+.foodInfoButton{
+  text-align: center;
+  font-family: 'Hanna','Ubuntu',sans-serif;
+  font-size: 24px;
+  color: $light-red;
+  cursor: pointer;
+  a{
+    @media screen and (min-width: 1000px){
+      &:hover{
+        color: darken($light-red,15%); 
+      }
+    }
+  }
+}

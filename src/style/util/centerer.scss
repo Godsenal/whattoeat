@@ -1,3 +1,4 @@
+@import './flex.scss';
 @mixin centerer($width: 50%, $height: 50%, $horizontal: true, $vertical: true) {
   position: absolute;
   @if ($horizontal and $vertical) {
@@ -29,8 +30,16 @@
   }
 }
 
-@mixin centererFlex{
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+@mixin centererFlex($horizontal:true, $vertical: true){
+  @include flexbox;
+  @if ($horizontal and $vertical) {
+    justify-content: center;
+    flex-direction: column;
+  } @else if ($horizontal) {
+    
+  } @else if ($vertical) {
+    align-items: center;
+  }
+  
 }
+

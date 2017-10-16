@@ -45,26 +45,16 @@ animation: #{$name};
   }
 }
 
-@include keyframes(hoverbutton) {
-  0% {
-      background-color: white;
-      color:$secondary-color;
-  }
 
-  100% {
-      background-color: $secondary-color;
-      color: white;
+@include keyframes(slideInFromBottom) {
+    0% {
+        top: 100%;
+        opacity: 0;
+        display: none;
+    }
+    100% {
+        top: 50%;
+        opacity: 1;
+        display: block;
+    }
   }
-}
-
-@include keyframes(hovernegative) {
-  0% {
-      background-color: white;
-      color:$negative-color;
-  }
-
-  100% {
-      background-color: $negative-color;
-      color: white;
-  }
-}
