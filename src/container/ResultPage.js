@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { connect } from 'react-redux';
-import { Transition } from 'react-transition-group';
+import Waypoint from 'react-waypoint';
 
 import FaAngleDoubleDown from 'react-icons/lib/fa/angle-double-down';
 import { Result, Modal } from '../component';
-import {setFoodResult, getFoods, getFoodByName, getFoodsByTag, getFoodsByTags, postFoods} from '../actions/food';
+import { getFoods, getRandomFood, getRandomFoodClear, getFoodByName, getFoodsByTag, getFoodsByTags, getFoodsByScroll, postFoods} from '../actions/food';
 
 import styles from '../style/ResultPage.scss';
 const cx = classNames.bind(styles);
@@ -18,34 +18,35 @@ class ResultPage extends Component{
       open: false,
     };
   }
+  handleScrollMore = () => {
+    this.props.getFoodsByScroll(true,0);
+  }
   handleToggleModal = () => {
-    if(!this.state.open){
-      this.props.getFoods();
-    }
     this.setState({
       open: !this.state.open,
     });
   }
   handleResetTag = () => {
-    this.props.setFoodResult('INIT');
+    this.props.getRandomFoodClear();
   }
   render(){
     const {open} = this.state;
-    const {activeTags, get, getByTags, foodResult, setFoodResult, getFoodsByTags} = this.props;
+    const {activeTags, get, getByScroll, getRandom, getRandomFood, getByTags,  getFoodsByTags,} = this.props;
     return(
       <div>
         {
-          foodResult.status == 'SUCCESS'?
+          getRandom.status == 'SUCCESS' && !getRandom.isRandom?
             <div className={cx('resetTagButton')} onClick={this.handleResetTag}>
               <FaAngleDoubleDown />
             </div>:null
         }
         <Result 
           activeTags={activeTags}
-          foodResult={foodResult}
           getByTags={getByTags}
-          setFoodResult={setFoodResult}
-          getFoodsByTags={getFoodsByTags}/>
+          getRandom={getRandom}
+          getFoodsByTags={getFoodsByTags}
+          getRandomFood={getRandomFood}
+          getRandomFoodClear={getRandomFoodClear}/>
         <div className={cx('foodInfoButton')}>
           <a onClick={this.handleToggleModal}>어떤 음식?</a>
         </div>
@@ -53,13 +54,16 @@ class ResultPage extends Component{
           open={open}
           header={'음식 정보'} 
           handleToggleModal={this.handleToggleModal}>
-          {
-            get.status === 'SUCCESS'?
-              get.foods.map((food,index)=>{
-                return <div key={index}>{food.name}</div>;
-              })
-              :<div>No Food</div>
-          }
+          <div ref={this.modalContainer}>
+            {
+              getByScroll.status === 'SUCCESS'?
+                getByScroll.foods.map((food,index)=>{
+                  return <div key={index} style={{fontSize:256}}>{food.name}</div>;
+                })
+                :<div>No Food</div>
+            }
+            <Waypoint onEnter={this.handleScrollMore} />
+          </div>
         </Modal>
         
       </div>
@@ -70,39 +74,45 @@ class ResultPage extends Component{
 ResultPage.defaultProps = {
   activeTags: [],
   isMobile: false,
-  foodResult: {},
 };
 ResultPage.propTypes = {
   isMobile: PropTypes.bool.isRequired,
   activeTags: PropTypes.array.isRequired,
-  foodResult: PropTypes.object.isRequired,
   get: PropTypes.object.isRequired,
+  getRandom: PropTypes.object.isRequired,
+  getByScroll : PropTypes.object.isRequired,
   getByTags: PropTypes.object.isRequired,
 
-  setFoodResult : PropTypes.func.isRequired,
   getFoods: PropTypes.func.isRequired,
+  getRandomFood: PropTypes.func.isRequired,
+  getRandomFoodClear: PropTypes.func.isRequired,
   getFoodByName: PropTypes.func.isRequired,
   getFoodsByTag: PropTypes.func.isRequired,
   getFoodsByTags: PropTypes.func.isRequired,
+  getFoodsByScroll : PropTypes.func.isRequired,
   postFoods: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
     activeTags: state.tag.activeTags,
-    foodResult: state.food.result,
     get: state.food.get,
+    getRandom: state.food.getRandom,
     getByTags: state.food.getByTags,
+    getByScroll: state.food.getByScroll,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setFoodResult : (status, name) => {
-      return dispatch(setFoodResult(status, name));
-    },
     getFoods : () => {
       return dispatch(getFoods());
+    },
+    getRandomFood : (tags) => {
+      return dispatch(getRandomFood(tags));
+    },
+    getRandomFoodClear : () => {
+      return dispatch(getRandomFoodClear());
     },
     getFoodByName : (name) => {
       return dispatch(getFoodByName(name));
@@ -112,6 +122,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     getFoodsByTags : (tags) => {
       return dispatch(getFoodsByTags(tags));
+    },
+    getFoodsByScroll : (isInitial, id) => {
+      return dispatch(getFoodsByScroll(isInitial, id));
     },
     postFoods : (foods) => {
       return dispatch(postFoods(foods));

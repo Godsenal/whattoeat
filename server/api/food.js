@@ -12,6 +12,18 @@ router.get('/all',function(req, res){
     res.json({foods});
   });
 });
+/* FIND FOODS BY SCROLL */
+router.get('/scroll/:id',function(req, res){
+  Foods.find({id:{$gte: req.params.id}})
+    .limit(15)
+    .exec(function(err, foods){
+      if(err){
+        return res.status(500).send({error: 'database error'});
+      }
+      res.json({foods});
+    });
+
+});
 /* FIND ONE FOOD BY NAME */
 router.get('/name/:name',function(req,res){
   Foods.findOne({name: req.params.name},function(err, food){

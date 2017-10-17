@@ -8,6 +8,17 @@ const initialState = {
     error: '',
     code: 1,
   },
+  getRandom:{
+    status: 'INIT',
+    food: {},
+    isRandom: false,
+  },
+  getByScroll:{
+    status: 'INIT',
+    foods: [],
+    size: 15,
+    isLast: false
+  },
   getByName:{
     status: 'INIT',
     food: '',
@@ -32,10 +43,6 @@ const initialState = {
     error: '',
     code: 1,
   },
-  result:{
-    status: 'INIT',
-    food: {},
-  }
 };
 
 export default function food(state,action){
@@ -43,13 +50,6 @@ export default function food(state,action){
     return initialState;
   }
   switch (action.type) {
-  case types.SET_FOOD_RESULT:
-    return update(state,{
-      result: {
-        status: {$set: action.status},
-        food: {$set: action.food},
-      }
-    });
   case types.GET_FOODS:
     return update(state,{
       get: {
@@ -66,6 +66,72 @@ export default function food(state,action){
   case types.GET_FOODS_FAILURE:
     return update(state,{
       get: {
+        status: {$set: 'FAILURE'},
+        error: {$set: action.error},
+        code: {$set: action.code}
+      }
+    });
+  case types.GET_RANDOM_FOOD:
+    return update(state,{
+      getRandom: {
+        status: {$set: 'WAITING'},
+        food: {$set: {}},
+        isRandom:{$set:false}
+      }
+    });
+  case types.GET_RANDOM_FOOD_SUCCESS:
+    return update(state,{
+      getRandom: {
+        status: {$set: 'SUCCESS'},
+        food: {$set: action.food},
+        isRandom: {$set: action.isRandom}
+      }
+    });
+  case types.GET_RANDOM_FOOD_FAILURE:
+    return update(state,{
+      getRandom: {
+        status: {$set: 'FAILURE'},
+        error: {$set: action.error},
+        code: {$set: action.code}
+      }
+    });
+  case types.GET_RANDOM_FOOD_CLEAR:
+    return update(state,{
+      getRandom: {
+        status: {$set: 'INIT'},
+        food: {$set: {}},
+        isRandom: {$set: false}
+      }
+    });
+  case types.GET_FOODS_BY_SCROLL:
+    return update(state,{
+      getByScroll:{
+        status: {$set: 'WAITING'},
+      }
+    });
+  case types.GET_FOODS_BY_SCROLL_SUCCESS:
+    if(action.isInitial){
+      return update(state,{
+        getByScroll:{
+          status: {$set: 'SUCCESS'},
+          foods: {$set: action.foods},
+          isLast: {$set: action.foods < 15}
+        }
+      });
+    }
+    else{
+      return update(state,{
+        getByScroll:{
+          status: {$set: 'SUCCESS'},
+          foods: {$push: action.foods},
+          isLast: {$set: action.foods < 15}
+        }
+      });
+    }
+    
+  case types.GET_FOODS_BY_SCROLL_FAILURE:
+    return update(state,{
+      getByScroll:{
         status: {$set: 'FAILURE'},
         error: {$set: action.error},
         code: {$set: action.code}

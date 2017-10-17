@@ -12,7 +12,8 @@
     width: 90%;
   }
   max-height: calc(100% - 100px);
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   opacity: 0;
   top: 100%;
   left: 50%;

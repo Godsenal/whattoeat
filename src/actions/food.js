@@ -1,8 +1,14 @@
 import {
-  SET_FOOD_RESULT,
+  GET_RANDOM_FOOD,
+  GET_RANDOM_FOOD_SUCCESS,
+  GET_RANDOM_FOOD_FAILURE,
+  GET_RANDOM_FOOD_CLEAR,
   GET_FOODS,
   GET_FOODS_SUCCESS,
   GET_FOODS_FAILURE,
+  GET_FOODS_BY_SCROLL,
+  GET_FOODS_BY_SCROLL_SUCCESS,
+  GET_FOODS_BY_SCROLL_FAILURE,
   GET_FOOD_BY_NAME,
   GET_FOOD_BY_NAME_SUCCESS,
   GET_FOOD_BY_NAME_FAILURE,
@@ -21,14 +27,29 @@ function action(type, payload = {}) {
   return {type, ...payload}
 }
 */
-export function setFoodResult(status,food={}) {
+export function getRandomFood(tags){
   return{
-    type: SET_FOOD_RESULT,
-    status,
-    food,
+    type: GET_RANDOM_FOOD,
+    tags
   };
 }
-
+export function getRandomFoodSuccess(data){
+  return{
+    type:GET_RANDOM_FOOD_SUCCESS,
+    ...data
+  }
+}
+export function getRandomFoodFailure(error){
+  return{
+    type:GET_RANDOM_FOOD_FAILURE,
+    ...error
+  }
+}
+export function getRandomFoodClear(){
+  return{
+    type:GET_RANDOM_FOOD_CLEAR
+  };
+}
 export function getFoods(){
   return{
     type: GET_FOODS,
@@ -46,7 +67,25 @@ export function getFoodsFailure(error){
     ...error
   };
 }
-
+export function getFoodsByScroll(isInitial = false, id = 0){
+  return{
+    type: GET_FOODS_BY_SCROLL,
+    isInitial,
+    id
+  };
+}
+export function getFoodsByScrollSuccess(data){
+  return{
+    type: GET_FOODS_BY_SCROLL_SUCCESS,
+    ...data
+  };
+}
+export function getFoodsByScrollFailure(error){
+  return{
+    type: GET_FOODS_BY_SCROLL_FAILURE,
+    ...error
+  };
+}
 export function getFoodByName(name){
   return{
     type: GET_FOOD_BY_NAME,

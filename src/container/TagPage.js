@@ -55,15 +55,15 @@ class TagPage extends Component{
       activeTags, 
       isMobile, 
       getRandom,
+      getFoodRandom,
       getSuggest, 
       addActiveTag,
       deleteActiveTag, 
-      foodResult, 
       getRandomTags,
       getSuggestTags
     } = this.props;
     return(
-      <div className={cx('tagContainer',foodResult.status !== 'INIT' && foodResult.status !== 'FAILURE'?'tagContainer-inactive':null)}>
+      <div className={cx('tagContainer',getFoodRandom.status !== 'INIT' && getFoodRandom.status !== 'FAILURE'?'tagContainer-inactive':null)}>
         <TagFinder
           handleAddTag={this.handleAddTag} 
           getSuggest={getSuggest}
@@ -89,8 +89,8 @@ TagPage.defaultProps = {
 TagPage.propTypes = {
   activeTags: PropTypes.array.isRequired,
   isMobile: PropTypes.bool.isRequired,
-  foodResult: PropTypes.object.isRequired,
   getRandom: PropTypes.object.isRequired,
+  getFoodRandom: PropTypes.object.isRequired,
   getSuggest: PropTypes.object.isRequired,
 
   addActiveTag: PropTypes.func.isRequired,
@@ -104,8 +104,8 @@ TagPage.propTypes = {
 const mapStateToProps = (state) => {
   return {
     activeTags: state.tag.activeTags,
-    foodResult: state.food.result,
     getRandom: state.tag.getRandom,
+    getFoodRandom: state.food.getRandom,
     getSuggest: state.tag.getSuggest,
   };
 };
