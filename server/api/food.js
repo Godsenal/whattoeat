@@ -13,8 +13,20 @@ router.get('/all',function(req, res){
   });
 });
 /* FIND FOODS BY SCROLL */
+router.get('/scroll',function(req, res){
+  Foods.find()
+    .limit(15)
+    .exec(function(err, foods){
+      if(err){
+        return res.status(500).send({error: 'database error'});
+      }
+      res.json({foods});
+    });
+
+});
+/* FIND FOODS BY SCROLL AFTER ID */
 router.get('/scroll/:id',function(req, res){
-  Foods.find({id:{$gte: req.params.id}})
+  Foods.find({_id:{$gt: req.params.id}})
     .limit(15)
     .exec(function(err, foods){
       if(err){

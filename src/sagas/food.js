@@ -98,12 +98,12 @@ function* handleGetRandomFood(){
 function* handleGetFoodsBySroll(){
   while(true){
     const action = yield take(types.GET_FOODS_BY_SCROLL);
-    const {res, err} = yield call(api.getFoodsByScroll,action.id);
+    const {res, err} = yield call(api.getFoodsByScroll, action.isInitial, action.id);
     if(res && !err){
-      yield put(actions.getFoodsByScrollSuccess());
+      yield put(actions.getFoodsByScrollSuccess({...res.data,isInitial: action.isInitial}));
     }
     else{
-      yield put(actions.getFoodsByScrollFailure());
+      yield put(actions.getFoodsByScrollFailure(err.response.data));
     }
   }
 }

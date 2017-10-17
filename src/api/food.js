@@ -10,8 +10,12 @@ export function getFoods(){
       return {err};
     });
 }
-export function getFoodsByScroll(id){
-  return axios.get(url+`/scroll/${id}`)
+export function getFoodsByScroll(isInitial, id){
+  var scrollUrl = url +'/scroll';
+  if(!isInitial){
+    scrollUrl += `/${id}`;
+  }
+  return axios.get(scrollUrl)
     .then((res)=>{
       return {res};
     }).catch((err)=>{

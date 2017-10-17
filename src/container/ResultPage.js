@@ -18,10 +18,15 @@ class ResultPage extends Component{
       open: false,
     };
   }
-  handleScrollMore = () => {
-    this.props.getFoodsByScroll(true,0);
+  handleScrollMore = (scroll) => {
+    if(scroll.previousPosition === 'below' && !this.props.getByScroll.isLast){
+      this.props.getFoodsByScroll(false,this.props.getByScroll.foods[this.props.getByScroll.foods.length -1]._id);
+    }
   }
   handleToggleModal = () => {
+    if(!this.state.open){
+      this.props.getFoodsByScroll(true);
+    }
     this.setState({
       open: !this.state.open,
     });
@@ -54,11 +59,19 @@ class ResultPage extends Component{
           open={open}
           header={'음식 정보'} 
           handleToggleModal={this.handleToggleModal}>
-          <div ref={this.modalContainer}>
+          <div>
             {
-              getByScroll.status === 'SUCCESS'?
+              getByScroll.foods.length?
                 getByScroll.foods.map((food,index)=>{
-                  return <div key={index} style={{fontSize:256}}>{food.name}</div>;
+                  return (
+                    <div key={index} className={cx('foodInfoList')}>
+                      <div className={cx('foodInfoFood')}>{food.name}</div>
+                      <div className={cx('foodInfoTags')}>{food.tags.map((tag,index)=>{
+                        return <span key={index}>{tag}</span>;
+                      })}
+                      </div>
+                    </div>
+                  );
                 })
                 :<div>No Food</div>
             }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
@@ -15,8 +16,19 @@ export default class Modal extends Component {
       show: false,
     };
   }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    /* SCROLL TO TOP WHEN MODAL OPENS AGAIN */
+    if(!prevProps.open && this.props.open){
+      const el = ReactDOM.findDOMNode(this.content);
+      if(el){
+        el.scrollTop = 0;
+      }
+    }
+  }
+  
   componentWillReceiveProps = (nextProps) => {
-    if(nextProps.open){
+    if(!this.props.open && nextProps.open){
       this.setState({
         display: 'block'
       });
@@ -26,7 +38,7 @@ export default class Modal extends Component {
         });
       },10);
     }
-    else{
+    else if(this.props.open && !nextProps.open){
       this.setState({
         show: false,
       });
@@ -43,18 +55,16 @@ export default class Modal extends Component {
 
     return (
       <div style={{display}} className={cx('modalContainer',show?'modalContainer-active':null)}>
-        <div className={cx('modalInnerContainer')}>
-          <div className={cx('modalHeader')}>
-            <div><span>{header}</span></div>
-            <a><FaClose onClick={handleToggleModal}/></a>
-          </div>
-          <div className={cx('modalContent')}>
-            {children}
-          </div>
-          <div className={cx('modalFooter')}>
-            <h1>I am Footer</h1>
-          </div>
-        </div> 
+        <div className={cx('modalHeader')}>
+          <div><span>{header}</span></div>
+          <a><FaClose onClick={handleToggleModal}/></a>
+        </div>
+        <div ref={ref=>this.content=ref} className={cx('modalContent')}>
+          {children}
+        </div>
+        <div className={cx('modalFooter')}>
+          <div>I am Footer</div>
+        </div>
       </div>
     );
   }
