@@ -6,6 +6,7 @@
     &:hover {
       background:darken($bg,8%);
       transition: all 0.3s ease;
+      -webkit-transition: all 0.3s ease;
     }
     &:active {
       background:darken($bg,25%);
@@ -22,6 +23,7 @@
     &:hover {
       background:darken($bg,8%);
       transition: all 0.3s ease;
+      -webkit-transition: all 0.3s ease;
     }
     &:active {
       background:darken($bg,25%);
@@ -35,6 +37,7 @@
   border: 1px solid $border;
   position: relative;
   transition: color 0.2s ease-in-out;
+  -webkit-transition: color 0.2s ease-in-out;
   &:hover{
     color: white;
   }
@@ -49,6 +52,7 @@
     left: 0;
     background-color: $border;
     transition: width 0.2s ease-in-out;
+    -webkit-transition: width 0.2s ease-in-out;
     
   }
   
@@ -85,4 +89,20 @@
     } 
   }
   
+}
+
+@mixin button-a($color){
+  text-align: center;
+  font-family: 'Hanna','Ubuntu',sans-serif;
+  font-size: 24px;
+  color: $color;
+  @media screen and (min-width: 1000px){
+    a{
+      &:hover{
+        color: darken($color,15%); 
+        cursor: pointer;
+      }
+    }
+    
+  }
 }

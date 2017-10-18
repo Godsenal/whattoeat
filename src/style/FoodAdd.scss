@@ -1,0 +1,59 @@
+@import 'util/color.scss';
+@import 'util/flex.scss';
+@import 'util/boxshadow.scss';
+@import 'util/button.scss';
+
+.foodAddButton{
+  @include button-a($light-red);
+}
+
+.foodAddContainer{
+  padding: 30px;
+  font-family: 'Hanna','Ubuntu', sans-serif;
+  font-size: 20px;
+}
+
+.foodAddInput{
+  display: block;
+  margin: auto;
+  width: 240px;
+  padding: 5px;
+  text-align: center;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  font-family: 'Noto Sans KR','Ubuntu', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  border-radius: 5px;
+  outline: 0;
+  z-index: 2;
+  @include boxShadowBottomRightThinLighter;
+}
+
+.foodAddTag{
+  display: inline-block;
+  padding: 5px;
+  margin: 2px;
+  margin-top: 15px;
+  background-color: $light-red;
+  color: white;
+  border-radius: 5px;
+  span{
+    color: black;
+    font-size: 16px;
+    background: transparent;
+    position: relative;
+    top: -15px;
+    right: -5px;
+    &:hover{
+      cursor: pointer;
+    }
+  }
+}
+
+.foodAddConfirm{
+  margin: 20px auto;
+  padding: 5px;
+  width: 50%;
+  @include button-fill($light-brown);
+}

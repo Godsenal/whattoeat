@@ -3,32 +3,37 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { connect } from 'react-redux';
 
-
 import FaAngleDoubleDown from 'react-icons/lib/fa/angle-double-down';
-import { Result } from '../component';
-import {setFoodResult, getFoods, getFoodByName, getFoodsByTag, getFoodsByTags, postFoods} from '../actions/food';
+import { Result, FoodInfo, FoodAdd } from '../component';
+import { getFoods, getRandomFood, getRandomFoodClear, getFoodByName, getFoodsByTag, getFoodsByTags, getFoodsByScroll, postFoods} from '../actions/food';
 
 import styles from '../style/ResultPage.scss';
 const cx = classNames.bind(styles);
 
 class ResultPage extends Component{
-  handleResetTag = () => {
-    this.props.setFoodResult('INIT');
-  }
   render(){
-    const {activeTags, foodResult, setFoodResult} = this.props;
+    const {activeTags, get, post, getByScroll, getRandom, getRandomFood, getRandomFoodClear, getByTags,  getFoodsByTags, getFoodsByScroll, postFoods} = this.props;
     return(
       <div>
         {
-          foodResult.status == 'SUCCESS'?
-            <div className={cx('resetTagButton')} onClick={this.handleResetTag}>
+          getRandom.status == 'SUCCESS' && !getRandom.isRandom?
+            <div className={cx('resetTagButton')} onClick={getRandomFoodClear}>
               <FaAngleDoubleDown />
             </div>:null
         }
         <Result 
           activeTags={activeTags}
-          foodResult={foodResult}
-          setFoodResult={setFoodResult}/>
+          getByTags={getByTags}
+          getRandom={getRandom}
+          getFoodsByTags={getFoodsByTags}
+          getRandomFood={getRandomFood}
+          getRandomFoodClear={getRandomFoodClear}/>
+        <FoodInfo
+          getByScroll={getByScroll}
+          getFoodsByScroll={getFoodsByScroll} />
+        <FoodAdd 
+          post={post}
+          postFoods={postFoods}/>
       </div>
     );
   }
@@ -37,34 +42,47 @@ class ResultPage extends Component{
 ResultPage.defaultProps = {
   activeTags: [],
   isMobile: false,
-  foodResult: {},
 };
 ResultPage.propTypes = {
   isMobile: PropTypes.bool.isRequired,
   activeTags: PropTypes.array.isRequired,
-  foodResult: PropTypes.object.isRequired,
-  setFoodResult : PropTypes.func.isRequired,
+  post: PropTypes.object.isRequired,
+  get: PropTypes.object.isRequired,
+  getRandom: PropTypes.object.isRequired,
+  getByScroll : PropTypes.object.isRequired,
+  getByTags: PropTypes.object.isRequired,
+
   getFoods: PropTypes.func.isRequired,
+  getRandomFood: PropTypes.func.isRequired,
+  getRandomFoodClear: PropTypes.func.isRequired,
   getFoodByName: PropTypes.func.isRequired,
   getFoodsByTag: PropTypes.func.isRequired,
   getFoodsByTags: PropTypes.func.isRequired,
+  getFoodsByScroll : PropTypes.func.isRequired,
   postFoods: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
     activeTags: state.tag.activeTags,
-    foodResult: state.food.result,
+    post: state.food.post,
+    get: state.food.get,
+    getRandom: state.food.getRandom,
+    getByTags: state.food.getByTags,
+    getByScroll: state.food.getByScroll,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setFoodResult : (status, name) => {
-      return dispatch(setFoodResult(status, name));
-    },
     getFoods : () => {
       return dispatch(getFoods());
+    },
+    getRandomFood : (tags) => {
+      return dispatch(getRandomFood(tags));
+    },
+    getRandomFoodClear : () => {
+      return dispatch(getRandomFoodClear());
     },
     getFoodByName : (name) => {
       return dispatch(getFoodByName(name));
@@ -74,6 +92,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     getFoodsByTags : (tags) => {
       return dispatch(getFoodsByTags(tags));
+    },
+    getFoodsByScroll : (isInitial, id) => {
+      return dispatch(getFoodsByScroll(isInitial, id));
     },
     postFoods : (foods) => {
       return dispatch(postFoods(foods));

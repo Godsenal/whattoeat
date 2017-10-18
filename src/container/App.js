@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { connect } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 
 import { Header} from '../component';
 import { TagPage, ResultPage } from './';
@@ -29,6 +30,14 @@ class App extends Component{
           isMobile={isMobile}/>
         <ResultPage
           isMobile={isMobile}/>
+        <ToastContainer 
+          position="bottom-center"
+          type="error"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+        />
       </div>
     );
   }

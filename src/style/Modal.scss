@@ -1,0 +1,98 @@
+@import 'util/animation.scss';
+@import 'util/color.scss';
+@import 'util/flex.scss';
+@import 'util/centerer.scss';
+@import 'util/boxshadow.scss';
+@import 'util/button.scss';
+.modalContainer{
+  position: fixed;
+  z-index: 999;
+  background: white;
+  width: 50%;
+  @media screen and (max-width: 999px){
+    width: 90%;
+  }
+  max-height: 70%;
+  height: 70%;
+  overflow: hidden;
+  opacity: 0;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  text-align: center;
+  visibility: hidden;
+  box-sizing: border-box;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 5px;
+  @include boxShadowBottomRightThinLighter;
+  transition: top 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  -webkit-transition: top 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+.modalContainer-active{
+  top: 10%;
+  opacity: 1;
+  visibility: visible;
+}
+.modalInnerContainer{
+  height: 100%;
+}
+
+.modalHeader{
+  @include centererFlex(false,true);
+  height: 60px;
+  font-size: 24px;
+  font-family: 'Hanna','Ubuntu',sans-serif;
+  font-weight: 600;
+  background: $light-red;
+  color: white;
+  padding: 5px;
+  div{
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    z-index: 1;
+  }
+  a{
+    width: 100%;
+    text-align: right;
+    margin-right: 5px;
+    z-index: 3;
+    svg{
+      &:hover{
+        cursor: pointer;
+      }
+    }
+  }
+  box-sizing: border-box;
+}
+.modalContent{
+  position: absolute;
+  box-sizing: border-box;
+  height: calc(100% - 120px);
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.modalFooter{
+  position: absolute;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(0,0,0,.1);
+  background: #FF404E;
+  width: 100%;
+  height: 60px;
+  bottom: 0;
+  padding: 10px 6px;
+  text-align: right;
+}
+
+.modalAction{
+  font-family: 'Hanna','Ubuntu',sans-serif;
+  background: transparent;
+  border: 0;
+  @include button-fill($light-red);
+  font-size: 20px;
+  margin-top: 4px;
+}

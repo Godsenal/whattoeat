@@ -5,7 +5,6 @@
 .tagFinderContainer{
   text-align: center;
   width: 100%;
-  margin: 20px auto;
 }
 
 .tagFinderContainer input{
@@ -33,10 +32,11 @@
   font-size: 16px;
   margin: auto;
   margin-bottom: 0px;
-  border-radius: 36px;
-  @include button-fill($light-blue);
+  border-radius: 100px;
+  @include button-fill($light-red);
 
   transition: margin-bottom 0.3s ease-in-out;
+  -webkit-transition: margin-bottom 0.3s ease-in-out;
 }
 
 .tagFinderButton-inactive{
@@ -45,23 +45,27 @@
 
 .tagFinderButtonIcon{
   transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+  -webkit-transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .tagFinderButtonIcon-rotate{
-  color: $dark-yellow;
   transform: rotate(45deg);
 }
 .tagFinderInput{
-  width: 0px;
-  visibility: hidden;
+  font-family: 'Hanna','Ubuntu',sans-serif;
+  font-size: 16px;
+  width: 240px;
   padding: 0px;
-  max-height: 0px;
-  transition: max-height 0.3s ease-in-out;
+  height: 0px;
+  visibility: hidden;
+  opacity: 0;
+  margin: 0px auto;
+  transition: height 0.3s ease-in-out,opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  -webkit-transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out,  visibility 0.3s ease-in-out;
 }
 .tagFinderInput-active{
-  width: 240px;
-  margin: 0px auto;
+  height: 40px;
   visibility: visible;
-  max-height: 100px;
+  opacity: 1;
   
 }
