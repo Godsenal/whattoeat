@@ -12,12 +12,12 @@ const cx = classNames.bind(styles);
 
 class ResultPage extends Component{
   render(){
-    const {activeTags, get, getByScroll, getRandom, getRandomFood, getByTags,  getFoodsByTags, getFoodsByScroll} = this.props;
+    const {activeTags, get, post, getByScroll, getRandom, getRandomFood, getRandomFoodClear, getByTags,  getFoodsByTags, getFoodsByScroll, postFoods} = this.props;
     return(
       <div>
         {
           getRandom.status == 'SUCCESS' && !getRandom.isRandom?
-            <div className={cx('resetTagButton')} onClick={this.handleResetTag}>
+            <div className={cx('resetTagButton')} onClick={getRandomFoodClear}>
               <FaAngleDoubleDown />
             </div>:null
         }
@@ -31,7 +31,9 @@ class ResultPage extends Component{
         <FoodInfo
           getByScroll={getByScroll}
           getFoodsByScroll={getFoodsByScroll} />
-        <FoodAdd />
+        <FoodAdd 
+          post={post}
+          postFoods={postFoods}/>
       </div>
     );
   }
@@ -44,6 +46,7 @@ ResultPage.defaultProps = {
 ResultPage.propTypes = {
   isMobile: PropTypes.bool.isRequired,
   activeTags: PropTypes.array.isRequired,
+  post: PropTypes.object.isRequired,
   get: PropTypes.object.isRequired,
   getRandom: PropTypes.object.isRequired,
   getByScroll : PropTypes.object.isRequired,
@@ -62,6 +65,7 @@ ResultPage.propTypes = {
 const mapStateToProps = (state) => {
   return {
     activeTags: state.tag.activeTags,
+    post: state.food.post,
     get: state.food.get,
     getRandom: state.food.getRandom,
     getByTags: state.food.getByTags,

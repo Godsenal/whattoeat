@@ -96,10 +96,13 @@
   font-family: 'Hanna','Ubuntu',sans-serif;
   font-size: 24px;
   color: $color;
-  cursor: pointer;
   @media screen and (min-width: 1000px){
-    &:hover{
-      color: darken($color,15%); 
+    a{
+      &:hover{
+        color: darken($color,15%); 
+        cursor: pointer;
+      }
     }
+    
   }
 }

@@ -45,7 +45,7 @@ class TagPage extends Component{
     }
     if(!isIn){
       this.setState({
-        showTags: [...showTags,tag]
+        showTags: [...showTags,{name:tag}]
       });
       this.props.addActiveTag(tag);
     }

@@ -21,10 +21,7 @@ export function getRandomTags(size){
 }
 
 export function getSuggestTags(word){
-  let config = {
-    headers: {'Content-type': 'application/json'}
-  };
-  return axios.get(url+`/search/${word}`,config)
+  return axios.get(url+`/search/${word}`)
     .then((res)=>{
       return {res};
     }).catch((err)=>{

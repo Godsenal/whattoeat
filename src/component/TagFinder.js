@@ -10,7 +10,16 @@ import theme from '../style/AutoSuggest.css';
 import {getSuggestTags } from '../actions/tag';
 
 const cx = classNames.bind(styles);
-const re=/^[0-9a-zA-Z가-힝]*$/;
+const re=/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+
+const checkAndReplace = (value) => {
+  let word = value;
+  let hasSpecial = re.test(word);
+  if(word && hasSpecial){
+    word = word.replace(re,'');
+  }
+  return word;
+};
 
 class TagFinder extends Component {
   constructor(){
@@ -20,13 +29,11 @@ class TagFinder extends Component {
       isSearch: false,
     };
   }
-  handleChange = (e) => {
-    let isValid = re.test(e.target.value);
-    if(!isValid){
-      return ;
-    }
+  handleChange = (e,{newValue}) => {
+    let word = checkAndReplace(newValue);
+    
     this.setState({
-      word : e.target.value
+      word
     });
   }
   handleSelect = (e,{suggestion}) => {
@@ -48,18 +55,17 @@ class TagFinder extends Component {
     });
   }
   getSuggestionValue = (item) =>{
-    let isValid = re.test(item.name);
-    console.log(isValid);
-    if(!isValid){
-      return ;
+    if(this.props.isAdd && 'value' in item){
+      return item.value;
     }
     else{
       return item.name;
     }
   }
   onSuggestionsFetchRequested = ({value}) =>{
-    if(value){
-      this.props.getSuggestTags(value);
+    let word = checkAndReplace(value);
+    if(word){
+      this.props.getSuggestTags(word);
     }
   }
   onSuggestionsClearRequested = () =>{

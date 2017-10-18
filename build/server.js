@@ -43,12 +43,35 @@ db.once('open', function () {
 });
 
 _mongoose2.default.Promise = require('bluebird');
-_mongoose2.default.connect(_config2.default.db);
+_mongoose2.default.connect(_config2.default.db, {
+  useMongoClient: true
+});
 
 app.use(_bodyParser2.default.urlencoded({ extended: true }));
 app.use(_bodyParser2.default.json());
 
 app.use('/api', _api2.default);
+
+app.get('*.js', function (req, res, next) {
+  req.url = req.url + '.gz';
+  res.set('Content-Encoding', 'gzip');
+  res.set('Content-Type', 'text/javascript');
+  next();
+});
+
+app.get('*.css', function (req, res, next) {
+  req.url = req.url + '.gz';
+  res.set('Content-Encoding', 'gzip');
+  res.set('Content-Type', 'text/css');
+  next();
+});
+
+app.get('*.scss', function (req, res, next) {
+  req.url = req.url + '.gz';
+  res.set('Content-Encoding', 'gzip');
+  res.set('Content-Type', 'text/x-scss');
+  next();
+});
 
 if (_config2.default.NODE_ENV == "development") {
   console.log("Server is running on development mode");

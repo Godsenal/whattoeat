@@ -1,7 +1,14 @@
 @import 'util/color.scss';
 .toastContainer{
   background: $light-red;
-  font-family: 'Noto Sans KR','Ubuntu',sans-serif;
+  font-family: 'Hanna','Ubuntu',sans-serif;
+  font-size: 20px;
+  text-align: center;
+}
+
+.toastContainer_info{
+  background: $light-blue;
+  font-family: 'Hanna','Ubuntu',sans-serif;
   font-size: 20px;
   text-align: center;
 }

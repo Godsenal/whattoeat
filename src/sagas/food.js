@@ -3,6 +3,7 @@ import { fork, take, put, call, all, takeLatest } from 'redux-saga/effects';
 import * as types from '../actions/ActionTypes';
 import * as actions from '../actions/food';
 import * as api from '../api/food';
+import {postTags} from '../api/tag';
 
 const MAX_RANDOM = 15;
 function* handleGetFoods(){
@@ -54,13 +55,18 @@ function* handleGetFoodsByTag(){
     }
   }
 }
-
+function* handlePostTags(foods){
+  yield foods.map(food => call(postTags, food.tags));
+}
 function* handlePostFoods(){
   while(true){
     const action = yield take(types.POST_FOODS);
+    
     const {res, err} = yield call(api.postFoods,action.foods);
+    
     if(res && !err){
       yield put(actions.postFoodsSuccess(res.data));
+      yield fork(handlePostTags,action.foods); // 새 Food에 맞는 Tags 추가
     }
     else{
       yield put(actions.postFoodsFailure(err.response.data));

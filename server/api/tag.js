@@ -37,7 +37,7 @@ router.get('/search/:name',function(req,res){
     if(err){
       return res.status(500).send({error: 'database error'});
     }
-    res.json({tags});
+    return res.json({tags});
   });
 });
 
@@ -47,14 +47,13 @@ router.get('/search',function(req,res){
 });
 
 router.post('',function(req,res){
-  let tag = new Tags();
-  tag.name = req.body.name;
-  Tags.save(function(err, tag){
-    if(err){
-      return console.error(err);
-    }
-    res.json({tag});
+  req.body.tags.forEach((tag)=>{
+    var newTag =  new Tags();
+    newTag.name = tag;
+    newTag.update({name: tag},{upsert:true},function(err){
+    });
   });
+  
 });
 
 export default router;

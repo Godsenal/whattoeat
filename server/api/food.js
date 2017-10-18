@@ -1,6 +1,5 @@
 import express from 'express';
 import Foods from '../models/Foods';
-
 const router = express.Router();
 
 /* FIND ALL FOODS */
@@ -59,28 +58,43 @@ router.get('/tag/:tag',function(req,res){
 });
 /* FIND ALL FOODS THAT MATHCES THE TAGS */
 router.post('/tags',function(req, res){
-  Foods.find({tags: {$all: req.body.tags}}, function(err, foods){
-    if(err){
-      return res.status(500).send({error: 'database error'});
-    }
-    res.json({foods});
-  });
+  if(req.body.tags.length == 0){
+    Foods.find({}, function(err, foods){
+      if(err){
+        return res.status(500).send({error: 'database error'});
+      }
+      res.json({foods});
+    });
+  }
+  else{
+    Foods.find({tags: {$all: req.body.tags}}, function(err, foods){
+      if(err){
+        return res.status(500).send({error: 'database error'});
+      }
+      res.json({foods});
+    });
+  }
+  
 });
-/* ADD ONE FOOD */
+/* ADD FOODS */
 router.post('',function(req,res){
-  var food = new Foods();
-  food.name = req.body.name;
-  food.tags= req.body.tags;
+  req.body.foods.forEach((food) => {
+    var newFood =  new Foods();
+    newFood.name = food.name;
+    newFood.tags = food.tags;
+    newFood.save(function(err){
+      if(err){
+        console.error(err);
+        if(err.code == 11000){
+          return res.status(400).json({code: '2', error: 'DUPLICATE FOOD NAME'});
+        }
+        return res.status(400).json({code: '1', error: 'CANNOT SAVE FOOD'});
+      }
 
-  food.save(function(err){
-    if(err){
-      console.error(err);
-      return res.status(400).json({code: '1', error: 'CANNOT SAVE FOOD'});
-    }
-
-    res.json({isSaved: true});
-
+      return res.json({isSaved: true});
+    });
   });
+  
 });
 
 export default router;
