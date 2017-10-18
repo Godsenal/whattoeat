@@ -2,6 +2,7 @@
 @import 'util/centerer.scss';
 @import 'util/button.scss';
 @import 'util/flex.scss';
+@import 'util/boxshadow.scss';
 
 .resetTagButton{
   text-align: center;
@@ -15,46 +16,4 @@
   border-radius: 100px;
   cursor: pointer;
   @include button-fill($dark-yellow);
-}
-
-.foodInfoButton{
-  text-align: center;
-  font-family: 'Hanna','Ubuntu',sans-serif;
-  font-size: 24px;
-  color: $light-red;
-  cursor: pointer;
-  a{
-    @media screen and (min-width: 1000px){
-      &:hover{
-        color: darken($light-red,15%); 
-      }
-    }
-  }
-}
-
-.foodInfoList{
-  @include flexbox;
-  
-  font-family: 'Hanna','Ubuntu', sans-serif;
-}
-
-.foodInfoFood{
-  @include flex-0-0;
-  flex-basis: 30%;
-  font-size: 20px;
-  line-height: 1.5;
-  display: inline-block;
-  vertical-align: middle;
-  padding: 10px;
-}
-
-.foodInfoTags{
-  @include flex-0-1;
-  font-size: 16px;
-  padding: 10px;
-  span{
-    display: inline-block;
-    vertical-align: middle;
-  }
-  text-align: left;
 }

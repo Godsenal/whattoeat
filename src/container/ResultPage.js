@@ -2,41 +2,17 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { connect } from 'react-redux';
-import Waypoint from 'react-waypoint';
 
 import FaAngleDoubleDown from 'react-icons/lib/fa/angle-double-down';
-import { Result, Modal } from '../component';
+import { Result, FoodInfo, FoodAdd } from '../component';
 import { getFoods, getRandomFood, getRandomFoodClear, getFoodByName, getFoodsByTag, getFoodsByTags, getFoodsByScroll, postFoods} from '../actions/food';
 
 import styles from '../style/ResultPage.scss';
 const cx = classNames.bind(styles);
 
 class ResultPage extends Component{
-  constructor(){
-    super();
-    this.state = {
-      open: false,
-    };
-  }
-  handleScrollMore = (scroll) => {
-    if(scroll.previousPosition === 'below' && !this.props.getByScroll.isLast){
-      this.props.getFoodsByScroll(false,this.props.getByScroll.foods[this.props.getByScroll.foods.length -1]._id);
-    }
-  }
-  handleToggleModal = () => {
-    if(!this.state.open){
-      this.props.getFoodsByScroll(true);
-    }
-    this.setState({
-      open: !this.state.open,
-    });
-  }
-  handleResetTag = () => {
-    this.props.getRandomFoodClear();
-  }
   render(){
-    const {open} = this.state;
-    const {activeTags, get, getByScroll, getRandom, getRandomFood, getByTags,  getFoodsByTags,} = this.props;
+    const {activeTags, get, getByScroll, getRandom, getRandomFood, getByTags,  getFoodsByTags, getFoodsByScroll} = this.props;
     return(
       <div>
         {
@@ -52,33 +28,10 @@ class ResultPage extends Component{
           getFoodsByTags={getFoodsByTags}
           getRandomFood={getRandomFood}
           getRandomFoodClear={getRandomFoodClear}/>
-        <div className={cx('foodInfoButton')}>
-          <a onClick={this.handleToggleModal}>어떤 음식?</a>
-        </div>
-        <Modal 
-          open={open}
-          header={'음식 정보'} 
-          handleToggleModal={this.handleToggleModal}>
-          <div>
-            {
-              getByScroll.foods.length?
-                getByScroll.foods.map((food,index)=>{
-                  return (
-                    <div key={index} className={cx('foodInfoList')}>
-                      <div className={cx('foodInfoFood')}>{food.name}</div>
-                      <div className={cx('foodInfoTags')}>{food.tags.map((tag,index)=>{
-                        return <span key={index}>{tag}</span>;
-                      })}
-                      </div>
-                    </div>
-                  );
-                })
-                :<div>No Food</div>
-            }
-            <Waypoint onEnter={this.handleScrollMore} />
-          </div>
-        </Modal>
-        
+        <FoodInfo
+          getByScroll={getByScroll}
+          getFoodsByScroll={getFoodsByScroll} />
+        <FoodAdd />
       </div>
     );
   }

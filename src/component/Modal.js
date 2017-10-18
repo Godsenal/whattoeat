@@ -57,13 +57,12 @@ export default class Modal extends Component {
       <div style={{display}} className={cx('modalContainer',show?'modalContainer-active':null)}>
         <div className={cx('modalHeader')}>
           <div><span>{header}</span></div>
-          <a><FaClose onClick={handleToggleModal}/></a>
         </div>
         <div ref={ref=>this.content=ref} className={cx('modalContent')}>
           {children}
         </div>
         <div className={cx('modalFooter')}>
-          <div>I am Footer</div>
+          <button className={cx('modalAction')} onClick={handleToggleModal}>닫기</button>
         </div>
       </div>
     );

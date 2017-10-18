@@ -2,11 +2,14 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { TagList, TagFinder } from '../component';
-import {addActiveTag, deleteActiveTag, getTags, getRandomTags, getSuggestTags, postTags } from '../actions/tag';
+import {addActiveTag, deleteActiveTag, getTags, getRandomTags, postTags } from '../actions/tag';
 
+import 'react-toastify/dist/ReactToastify.min.css';
 import styles from '../style/TagPage.scss';
+import toastStyle from '../style/Toast.scss';
 const cx = classNames.bind(styles);
 
 class TagPage extends Component{
@@ -35,16 +38,21 @@ class TagPage extends Component{
     const {showTags} = this.state;
     var isIn = false;
     for(var i = 0; i < showTags.length; i++){
-      if(showTags[i] == tag){
+      if(showTags[i].name == tag){
         isIn = true;
         break;
       }
     }
-    if(isIn){
+    if(!isIn){
       this.setState({
         showTags: [...showTags,tag]
       });
       this.props.addActiveTag(tag);
+    }
+    else{
+      toast.error('이미 있는 태그입니다.',{
+        className: 'toastContainer'
+      });
     }
     
   }
@@ -56,18 +64,14 @@ class TagPage extends Component{
       isMobile, 
       getRandom,
       getFoodRandom,
-      getSuggest, 
       addActiveTag,
       deleteActiveTag, 
       getRandomTags,
-      getSuggestTags
     } = this.props;
     return(
       <div className={cx('tagContainer',getFoodRandom.status !== 'INIT' && getFoodRandom.status !== 'FAILURE'?'tagContainer-inactive':null)}>
         <TagFinder
-          handleAddTag={this.handleAddTag} 
-          getSuggest={getSuggest}
-          getSuggestTags={getSuggestTags}/>
+          handleAddTag={this.handleAddTag}/>
         <TagList 
           isMobile={isMobile}
           activeTags={activeTags}
@@ -91,13 +95,11 @@ TagPage.propTypes = {
   isMobile: PropTypes.bool.isRequired,
   getRandom: PropTypes.object.isRequired,
   getFoodRandom: PropTypes.object.isRequired,
-  getSuggest: PropTypes.object.isRequired,
 
   addActiveTag: PropTypes.func.isRequired,
   deleteActiveTag: PropTypes.func.isRequired,
   getTags: PropTypes.func.isRequired,
   getRandomTags: PropTypes.func.isRequired,
-  getSuggestTags: PropTypes.func.isRequired,
   postTags: PropTypes.func.isRequired,
 };
 
@@ -106,7 +108,6 @@ const mapStateToProps = (state) => {
     activeTags: state.tag.activeTags,
     getRandom: state.tag.getRandom,
     getFoodRandom: state.food.getRandom,
-    getSuggest: state.tag.getSuggest,
   };
 };
 
@@ -123,9 +124,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     getRandomTags : (size) => {
       return dispatch(getRandomTags(size));
-    },
-    getSuggestTags : (word) => {
-      return dispatch(getSuggestTags(word));
     },
     postTags : (tags) => {
       return dispatch(postTags(tags));
