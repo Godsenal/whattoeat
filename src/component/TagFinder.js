@@ -100,7 +100,6 @@ class TagFinder extends Component {
               placeholder: '태그 검색',
               onChange: this.handleChange,
               value: word,
-              autoFocus: true,
             }}
             theme={theme}
           />
