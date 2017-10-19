@@ -76,25 +76,49 @@ router.post('/tags',function(req, res){
   }
   
 });
-/* ADD FOODS */
-router.post('',function(req,res){
-  req.body.foods.forEach((food) => {
-    var newFood =  new Foods();
-    newFood.name = food.name;
-    newFood.tags = food.tags;
-    newFood.save(function(err){
-      if(err){
-        console.error(err);
-        if(err.code == 11000){
-          return res.status(400).json({code: '2', error: 'DUPLICATE FOOD NAME'});
-        }
-        return res.status(400).json({code: '1', error: 'CANNOT SAVE FOOD'});
-      }
-
-      return res.json({isSaved: true});
-    });
+/* FIND FOODS BY SEARCH */
+router.get('/search/:name',function(req,res){
+  var re = '';
+  if(req.params.name){
+    re = '^' + req.params.name;
+  }
+  Foods.find({name: {$regex: re}}, function(err, foods){
+    if(err){
+      return res.status(500).send({error: 'database error'});
+    }
+    return res.json({foods});
   });
-  
 });
 
+/* ADD FOODS */
+router.post('',function(req,res){
+  var length = req.body.foods.length;
+  Foods.insertMany(req.body.foods,{ ordered: false },function(err,r){
+    if(err){
+      if(err.code === 11000){
+        return res.status(400).json({code: '2', error: 'DUPLICATE FOOD NAME'});
+      }
+      return res.status(400).json({code: '1', error: 'CANNOT SAVE FOOD'});
+    }
+    
+    if(r.length !== length){
+      return res.status(400).json({code: '2', error: 'SAVE LENGTH DOES NOT MATCH'});
+    }
+
+    return res.json({isSaved: true});
+  });
+});
+/* UPDATE FOOD */
+router.put('',function(req,res){
+  const {id, name, tags} = req.body.food;
+  Foods.findByIdAndUpdate(id, { $set: { name: name, tags: tags }}, { new: true }, function (err, food) {
+    if (err){
+      if(err.code === 11000){
+        return res.status(400).json({code: '2', error: 'DUPLICATE FOOD NAME'});
+      }
+      return res.status(400).json({code: '1', error: 'CANNOT UPDATE FOOD'});
+    }
+    return res.json({food});
+  });
+});
 export default router;

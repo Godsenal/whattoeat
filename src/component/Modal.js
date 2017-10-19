@@ -51,10 +51,10 @@ export default class Modal extends Component {
   }
   render() {
     const {display, show} = this.state;
-    const {handleToggleModal, header, children} = this.props;
+    const {handleToggleModal, header, children, width, height} = this.props;
 
     return (
-      <div style={{display}} className={cx('modalContainer',show?'modalContainer-active':null)}>
+      <div style={{display, width, height}} className={cx('modalContainer',show?'modalContainer-active':null)}>
         <div className={cx('modalHeader')}>
           <div><span>{header}</span></div>
         </div>
@@ -70,9 +70,12 @@ export default class Modal extends Component {
 }
 
 Modal.defaultProps = {
-
+  width: '50%',
+  height: '70%'
 };
 Modal.propTypes ={
+  width: PropTypes.string,
+  height: PropTypes.string,
   open: PropTypes.bool.isRequired,
   header: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,

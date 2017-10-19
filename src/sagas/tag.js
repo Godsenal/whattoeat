@@ -52,10 +52,10 @@ function createLazily(msec = 100) {
 }
 
 function* handleGetSuggestTags() {
-  //const lazily = createLazily();
+  const lazily = createLazily();
   while (true) {
     const action = yield take(types.GET_SUGGEST_TAGS);
-    yield fork( runRequestSuggest, action.word);
+    yield fork( lazily, runRequestSuggest, action.word);
   }
 }
 

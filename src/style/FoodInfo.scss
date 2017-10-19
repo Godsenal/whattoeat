@@ -43,3 +43,42 @@
     margin: 0 2px;
   }
 }
+
+.foodInfoEdit{
+  @include flex-0-1;
+  font-size: 16px;
+  text-align: center;
+  color: $light-red;
+  padding: 10px;
+}
+
+.foodInfoSearch{
+  padding: 10px;
+}
+
+.foodInfoSearchInput{
+  display: inline-block;
+  margin: auto;
+  width: 50%;
+  padding: 5px;
+  text-align: center;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  font-family: 'Hanna','Ubuntu', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  border-radius: 5px;
+  outline: 0;
+  z-index: 2;
+  @include boxShadowBottomRightThinLighter;
+}
+
+.foodInfoSearchIcon{
+  display: inline-block;
+  font-size: 16px;
+  padding: 5px;
+  border: 1px solid #aaa;
+  margin: 0 3px;
+  @include button-border(#aaa);
+  color: black;
+}

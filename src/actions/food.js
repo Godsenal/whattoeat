@@ -18,9 +18,15 @@ import {
   GET_FOODS_BY_TAGS,
   GET_FOODS_BY_TAGS_SUCCESS,
   GET_FOODS_BY_TAGS_FAILURE,
+  GET_FOODS_BY_SEARCH,
+  GET_FOODS_BY_SEARCH_SUCCESS,
+  GET_FOODS_BY_SEARCH_FAILURE,
   POST_FOODS,
   POST_FOODS_SUCCESS,
-  POST_FOODS_FAILURE
+  POST_FOODS_FAILURE,
+  UPDATE_FOOD,
+  UPDATE_FOOD_SUCCESS,
+  UPDATE_FOOD_FAILURE,
 } from './ActionTypes';
 /*
 function action(type, payload = {}) {
@@ -143,6 +149,25 @@ export function getFoodsByTagsFailure(error){
   };
 }
 
+export function getFoodsBySearch(name){
+  return{
+    type: GET_FOODS_BY_SEARCH,
+    name
+  };
+}
+export function getFoodsBySearchSuccess(data){
+  return{
+    type:GET_FOODS_BY_SEARCH_SUCCESS,
+    ...data
+  };
+}
+export function getFoodsBySearchFailure(error){
+  return{
+    type: GET_FOODS_BY_SEARCH_FAILURE,
+    ...error
+  };
+}
+
 export function postFoods(foods){
   return{
     type: POST_FOODS,
@@ -158,6 +183,25 @@ export function postFoodsSuccess(data){
 export function postFoodsFailure(error){
   return{
     type: POST_FOODS_FAILURE,
+    ...error
+  };
+}
+
+export function updateFood(food){
+  return{
+    type: UPDATE_FOOD,
+    food
+  };
+}
+export function updateFoodSuccess(data){
+  return{
+    type: UPDATE_FOOD_SUCCESS,
+    ...data
+  };
+}
+export function updateFoodFailure(error){
+  return{
+    type: UPDATE_FOOD_FAILURE,
     ...error
   };
 }
