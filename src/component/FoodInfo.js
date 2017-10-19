@@ -73,6 +73,10 @@ export default class FoodInfo extends Component {
     }
     this.setState({
       open: !this.state.open,
+      searchWord: '',
+      isSearching: false,
+      editOpen: false,
+      editFood: {},
     });
   }
   handleToggleEditModal = (food = {}) => {

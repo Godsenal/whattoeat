@@ -268,12 +268,15 @@ export default function food(state,action){
         break;
       }
     }
+    var searchIndex = -1;
+    for(var i = 0; i< state.getBySearch.foods.length; i++){
+      if(state.getBySearch.foods[i]._id === action.food._id){
+        searchIndex = i;
+        break;
+      }
+    }
     if(index >= 0){
-      return update(state,{
-        update: {
-          status: {$set: 'SUCCESS'},
-          food: {$set: action.food},
-        },
+      state = update(state,{
         getByScroll: {
           foods:{
             [index]: {$set: action.food}
@@ -281,15 +284,21 @@ export default function food(state,action){
         }
       });
     }
-    else{
-      return update(state,{
-        update: {
-          status: {$set: 'SUCCESS'},
-          food: {$set: action.food},
-        },
+    if(searchIndex >=0){
+      state = update(state,{
+        getBySearch: {
+          foods:{
+            [index]: {$set: action.food}
+          }
+        }
       });
     }
-    
+    return update(state,{
+      update: {
+        status: {$set: 'SUCCESS'},
+        food: {$set: action.food},
+      }
+    });
   case types.UPDATE_FOOD_FAILURE:
     return update(state,{
       update: {
