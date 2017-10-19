@@ -56,16 +56,16 @@ class TagFinder extends Component {
   }
   getSuggestionValue = (item) =>{
     if(this.props.isAdd && 'value' in item){
-      return item.value;
+      return item.value.trim();
     }
     else{
-      return item.name;
+      return item.name.trim();
     }
   }
   onSuggestionsFetchRequested = ({value}) =>{
     let word = checkAndReplace(value);
     if(word){
-      this.props.getSuggestTags(word);
+      this.props.getSuggestTags(word.trim());
     }
   }
   onSuggestionsClearRequested = () =>{
@@ -80,9 +80,7 @@ class TagFinder extends Component {
         {
           !isAdd?
             <div className={cx('tagFinderButton',isSearch?'tagFinderButton-inactive':null)} onClick={this.handleButtonClick}>
-              <div>
-                <FaFlus className={cx('tagFinderButtonIcon',isSearch?'tagFinderButtonIcon-rotate':null)}/>
-              </div>
+              <FaFlus className={cx('tagFinderButtonIcon',isSearch?'tagFinderButtonIcon-rotate':null)}/>
             </div>:null
         }
         

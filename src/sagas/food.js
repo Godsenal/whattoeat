@@ -56,7 +56,12 @@ function* handleGetFoodsByTag(){
   }
 }
 function* handlePostTags(foods){
-  yield foods.map(food => call(postTags, food.tags));
+  yield foods.map(food => {
+    var tagArr = food.tags.map((tag)=>{
+      return {name:tag.trim()};
+    });
+    return call(postTags, tagArr);
+  });
 }
 function* handlePostFoods(){
   while(true){
@@ -70,6 +75,20 @@ function* handlePostFoods(){
     }
     else{
       yield put(actions.postFoodsFailure(err.response.data));
+    }
+  }
+}
+function* handleUpdateFood(){
+  while(true){
+    const action = yield take(types.UPDATE_FOOD);
+    
+    const {res, err} = yield call(api.updateFood, action.food);
+    if(res && !err){
+      yield put(actions.updateFoodSuccess(res.data));
+      yield fork(handlePostTags,[action.food]); // 수정된 Food에 맞는 Tags 추가
+    }
+    else{
+      yield put(actions.updateFoodFailure(err.response.data));
     }
   }
 }
@@ -113,6 +132,18 @@ function* handleGetFoodsBySroll(){
     }
   }
 }
+function* handleGetFoodsBySearch(){
+  while(true){
+    const action = yield take(types.GET_FOODS_BY_SEARCH);
+    const {res, err} = yield call(api.getFoodsBySearch, action.name);
+    if(res && !err){
+      yield put(actions.getFoodsBySearchSuccess(res.data));
+    }
+    else{
+      yield put(actions.getFoodsBySearchFailure(err.response.data));
+    }
+  }
+}
 export default function* rootSaga() {
   yield all([
     fork(handleGetRandomFood),
@@ -121,6 +152,8 @@ export default function* rootSaga() {
     fork(handleGetFoodByName),
     fork(handleGetFoodsByTag),
     fork(handleGetFoodsByTags),
-    fork(handlePostFoods)
+    fork(handleGetFoodsBySearch),
+    fork(handlePostFoods),
+    fork(handleUpdateFood),
   ]);
 }

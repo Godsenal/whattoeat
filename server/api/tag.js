@@ -47,11 +47,11 @@ router.get('/search',function(req,res){
 });
 
 router.post('',function(req,res){
-  req.body.tags.forEach((tag)=>{
-    var newTag =  new Tags();
-    newTag.name = tag;
-    newTag.update({name: tag},{upsert:true},function(err){
-    });
+  Tags.insertMany(req.body.tags,{ ordered: false },function(err,r){
+    if(err && err.code !== 11000){ // DO NOT NEED TO HANDLE DUPLICATE TAG NAME
+      return res.status(400).json({code: '1', error: 'CANNOT SAVE TAG'});
+    }
+    return res.json({isSaved: true});
   });
   
 });

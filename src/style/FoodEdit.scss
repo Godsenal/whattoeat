@@ -8,16 +8,16 @@
   @include button-a($light-red);
 }
 
-.foodAddContainer{
-  padding: 30px;
+.foodEditContainer{
+  padding: 10px;
   font-family: 'Hanna','Ubuntu', sans-serif;
   font-size: 20px;
 }
 
-.foodAddInput{
+.foodEditInput{
   display: block;
   margin: auto;
-  width: 240px;
+  width: 30%;
   padding: 5px;
   text-align: center;
   border: 1px solid #aaa;
@@ -31,11 +31,11 @@
   @include boxShadowBottomRightThinLighter;
 }
 
-.foodAddInputError{
+.foodEditInputError{
   border: 1px solid lightcoral;
   @include animation(inputError 0.3s linear);
 }
-.foodAddTag{
+.foodEditTag{
   display: inline-block;
   padding: 5px;
   margin: 2px;
@@ -56,7 +56,7 @@
   }
 }
 
-.foodAddConfirm{
+.foodEditConfirm{
   margin: 20px auto;
   padding: 5px;
   width: 50%;

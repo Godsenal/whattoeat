@@ -5,14 +5,42 @@ import { connect } from 'react-redux';
 
 import FaAngleDoubleDown from 'react-icons/lib/fa/angle-double-down';
 import { Result, FoodInfo, FoodAdd } from '../component';
-import { getFoods, getRandomFood, getRandomFoodClear, getFoodByName, getFoodsByTag, getFoodsByTags, getFoodsByScroll, postFoods} from '../actions/food';
+import { 
+  getFoods, 
+  getRandomFood, 
+  getRandomFoodClear, 
+  getFoodByName, 
+  getFoodsByTag, 
+  getFoodsByTags, 
+  getFoodsByScroll, 
+  getFoodsBySearch,
+  postFoods, 
+  updateFood
+} from '../actions/food';
 
 import styles from '../style/ResultPage.scss';
 const cx = classNames.bind(styles);
 
 class ResultPage extends Component{
   render(){
-    const {activeTags, get, post, getByScroll, getRandom, getRandomFood, getRandomFoodClear, getByTags,  getFoodsByTags, getFoodsByScroll, postFoods} = this.props;
+    const {
+      isMobile, 
+      activeTags, 
+      get, 
+      update, 
+      post, 
+      getByScroll, 
+      getBySearch,
+      getRandom, 
+      getRandomFood, 
+      getRandomFoodClear, 
+      getByTags,  
+      getFoodsByTags, 
+      getFoodsByScroll,
+      getFoodsBySearch, 
+      postFoods, 
+      updateFood
+    } = this.props;
     return(
       <div>
         {
@@ -29,9 +57,15 @@ class ResultPage extends Component{
           getRandomFood={getRandomFood}
           getRandomFoodClear={getRandomFoodClear}/>
         <FoodInfo
+          isMobile={isMobile}
+          update={update}
+          updateFood={updateFood}
           getByScroll={getByScroll}
-          getFoodsByScroll={getFoodsByScroll} />
-        <FoodAdd 
+          getBySearch={getBySearch}
+          getFoodsByScroll={getFoodsByScroll}
+          getFoodsBySearch={getFoodsBySearch} />
+        <FoodAdd
+          isMobile={isMobile} 
           post={post}
           postFoods={postFoods}/>
       </div>
@@ -50,7 +84,9 @@ ResultPage.propTypes = {
   get: PropTypes.object.isRequired,
   getRandom: PropTypes.object.isRequired,
   getByScroll : PropTypes.object.isRequired,
+  getBySearch: PropTypes.object.isRequired,
   getByTags: PropTypes.object.isRequired,
+  update: PropTypes.object.isRequired,
 
   getFoods: PropTypes.func.isRequired,
   getRandomFood: PropTypes.func.isRequired,
@@ -59,7 +95,9 @@ ResultPage.propTypes = {
   getFoodsByTag: PropTypes.func.isRequired,
   getFoodsByTags: PropTypes.func.isRequired,
   getFoodsByScroll : PropTypes.func.isRequired,
+  getFoodsBySearch: PropTypes.func.isRequired,
   postFoods: PropTypes.func.isRequired,
+  updateFood: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -70,6 +108,8 @@ const mapStateToProps = (state) => {
     getRandom: state.food.getRandom,
     getByTags: state.food.getByTags,
     getByScroll: state.food.getByScroll,
+    getBySearch: state.food.getBySearch,
+    update: state.food.update,
   };
 };
 
@@ -96,9 +136,15 @@ const mapDispatchToProps = (dispatch) => {
     getFoodsByScroll : (isInitial, id) => {
       return dispatch(getFoodsByScroll(isInitial, id));
     },
+    getFoodsBySearch : (name) => {
+      return dispatch(getFoodsBySearch(name));
+    },
     postFoods : (foods) => {
       return dispatch(postFoods(foods));
     },
+    updateFood : (food) => {
+      return dispatch(updateFood(food));
+    }
   };
 };
 

@@ -37,9 +37,21 @@ const initialState = {
     error: '',
     code: 1,
   },
+  getBySearch:{
+    status: 'INIT',
+    foods: [],
+    error: '',
+    code: 1,
+  },
   post:{
     status: 'INIT',
     isSaved: false,
+    error: '',
+    code: 1,
+  },
+  update:{
+    status: 'INIT',
+    food: {},
     error: '',
     code: 1,
   },
@@ -200,6 +212,27 @@ export default function food(state,action){
         code: {$set: action.code}
       }
     });
+  case types.GET_FOODS_BY_SEARCH:
+    return update(state,{
+      getBySearch: {
+        status: {$set: 'WAITING'}
+      }
+    });
+  case types.GET_FOODS_BY_SEARCH_SUCCESS:
+    return update(state,{
+      getBySearch: {
+        status: {$set: 'SUCCESS'},
+        foods: {$set: action.foods}
+      }
+    });
+  case types.GET_FOODS_BY_SEARCH_FAILURE:
+    return update(state,{
+      getBySearch: {
+        status: {$set: 'FAILURE'},
+        error: {$set: action.error},
+        code: {$set: action.code}
+      }
+    });
   case types.POST_FOODS:
     return update(state,{
       post: {
@@ -216,6 +249,50 @@ export default function food(state,action){
   case types.POST_FOODS_FAILURE:
     return update(state,{
       post: {
+        status: {$set: 'FAILURE'},
+        error: {$set: action.error},
+        code: {$set: action.code}
+      }
+    });
+  case types.UPDATE_FOOD:
+    return update(state,{
+      update: {
+        status: {$set: 'WAITING'}
+      }
+    });
+  case types.UPDATE_FOOD_SUCCESS:
+    var index = -1;
+    for(var i = 0; i< state.getByScroll.foods.length; i++){
+      if(state.getByScroll.foods[i]._id === action.food._id){
+        index = i;
+        break;
+      }
+    }
+    if(index >= 0){
+      return update(state,{
+        update: {
+          status: {$set: 'SUCCESS'},
+          food: {$set: action.food},
+        },
+        getByScroll: {
+          foods:{
+            [index]: {$set: action.food}
+          }
+        }
+      });
+    }
+    else{
+      return update(state,{
+        update: {
+          status: {$set: 'SUCCESS'},
+          food: {$set: action.food},
+        },
+      });
+    }
+    
+  case types.UPDATE_FOOD_FAILURE:
+    return update(state,{
+      update: {
         status: {$set: 'FAILURE'},
         error: {$set: action.error},
         code: {$set: action.code}

@@ -28,12 +28,12 @@
   width: 36px;
   height: 36px;
   text-align: center;
-  padding: 5px;
   font-size: 16px;
   margin: auto;
   margin-bottom: 0px;
   border-radius: 100px;
   @include button-fill($light-red);
+  @include centererFlex(false,true);
 
   transition: margin-bottom 0.3s ease-in-out;
   -webkit-transition: margin-bottom 0.3s ease-in-out;
@@ -44,6 +44,7 @@
 }
 
 .tagFinderButtonIcon{
+  margin: auto;
   transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
   -webkit-transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
 }

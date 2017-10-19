@@ -50,8 +50,25 @@ export function getFoodsByTags(tags){
     });
 }
 
+export function getFoodsBySearch(name){
+  return axios.get(url+`/search/${name}`)
+    .then((res)=>{
+      return {res};
+    }).catch((err)=>{
+      return {err};
+    });
+}
 export function postFoods(foods){
   return axios.post(url,{foods})
+    .then((res)=>{
+      return {res};
+    }).catch((err)=>{
+      return {err};
+    });
+}
+
+export function updateFood(food){
+  return axios.put(url,{food})
     .then((res)=>{
       return {res};
     }).catch((err)=>{
