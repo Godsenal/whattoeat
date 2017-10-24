@@ -111,7 +111,7 @@ function* generateFood(foods){
 function* handleGetRandomFood(){
   while(true){
     const action = yield take(types.GET_RANDOM_FOOD);
-    const {res, err} = yield call(api.getFoodsByTags, action.tags);
+    const {res, err} = yield call(api.getFoodsByTags, action.tags, action.untags);
     if(res && !err){
       yield fork(generateFood,res.data.foods);
     }

@@ -1,6 +1,8 @@
 import{
   ADD_ACTIVE_TAG,
   DELETE_ACTIVE_TAG,
+  ADD_INACTIVE_TAG,
+  DELETE_INACTIVE_TAG,
   GET_TAGS,
   GET_TAGS_SUCCESS,
   GET_TAGS_FAILURE,
@@ -25,6 +27,20 @@ export function addActiveTag(tag) {
 export function deleteActiveTag(index) {
   return {
     type: DELETE_ACTIVE_TAG,
+    index
+  };
+}
+
+export function addInactiveTag(tag) {
+  return {
+    type: ADD_INACTIVE_TAG,
+    tag
+  };
+}
+
+export function deleteInctiveTag(index) {
+  return {
+    type: DELETE_INACTIVE_TAG,
     index
   };
 }

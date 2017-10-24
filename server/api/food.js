@@ -59,7 +59,7 @@ router.get('/tag/:tag',function(req,res){
 /* FIND ALL FOODS THAT MATHCES THE TAGS */
 router.post('/tags',function(req, res){
   if(req.body.tags.length == 0){
-    Foods.find({}, function(err, foods){
+    Foods.find({tags: { $nin: req.body.untags}}, function(err, foods){
       if(err){
         return res.status(500).send({error: 'database error'});
       }
@@ -67,7 +67,7 @@ router.post('/tags',function(req, res){
     });
   }
   else{
-    Foods.find({tags: {$all: req.body.tags}}, function(err, foods){
+    Foods.find({$and:[{tags: {$all: req.body.tags}},{tags: { $nin: req.body.untags}}]}, function(err, foods){
       if(err){
         return res.status(500).send({error: 'database error'});
       }

@@ -3,6 +3,7 @@ import update from 'react-addons-update';
 
 const initialState = {
   activeTags: [],
+  inactiveTags: [],
   get:{
     status: 'INIT',
     tags: [],
@@ -33,6 +34,14 @@ export default function tag(state, action){
   case types.DELETE_ACTIVE_TAG:
     return update(state,{
       activeTags: {$splice: [[action.index,1]]}
+    });
+  case types.ADD_INACTIVE_TAG:
+    return update(state,{
+      inactiveTags: {$push: [action.tag]}
+    });
+  case types.DELETE_INACTIVE_TAG:
+    return update(state,{
+      inactiveTags: {$splice: [[action.index,1]]}
     });
   case types.GET_TAGS:
     return update(state,{

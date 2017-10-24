@@ -8,13 +8,13 @@ const cx = classNames.bind(styles);
 class Result extends Component {
 
   componentWillReceiveProps = (nextProps) => {
-    if(this.props.activeTags !== nextProps.activeTags){
+    if(this.props.activeTags !== nextProps.activeTags || this.props.inactiveTags !== nextProps.inactiveTags){
       this.props.getRandomFoodClear();
     }
   }
   
   handleStart = () => {
-    this.props.getRandomFood(this.props.activeTags);
+    this.props.getRandomFood(this.props.activeTags, this.props.inactiveTags);
   }
   render() {
     const {getRandom} = this.props;
@@ -39,9 +39,11 @@ class Result extends Component {
 
 Result.defaultProps = {
   activeTags: [],
+  inactiveTags: [],
 };
 Result.propTypes = {
   activeTags: PropTypes.array.isRequired,
+  inactiveTags: PropTypes.array.isRequired,
   getRandom: PropTypes.object.isRequired,
 
   getByTags: PropTypes.object.isRequired,

@@ -44,6 +44,10 @@
   -webkit-transition: width .3s ease-in-out;
   transition: width .3s ease-in-out;
 }
+.inactiveTag{
+  @extend .activeTag;
+  text-decoration: line-through;
+}
 .addTag{
   padding: 10px;
   margin: 0.3em;

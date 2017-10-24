@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { TagList, TagFinder } from '../component';
-import {addActiveTag, deleteActiveTag, getTags, getRandomTags, postTags } from '../actions/tag';
+import {addActiveTag, deleteActiveTag, addInactiveTag, deleteInctiveTag, getTags, getRandomTags, postTags } from '../actions/tag';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 import styles from '../style/TagPage.scss';
@@ -60,12 +60,15 @@ class TagPage extends Component{
   render(){
     const {showTags} = this.state;
     const {
-      activeTags, 
+      activeTags,
+      inactiveTags ,
       isMobile, 
       getRandom,
       getFoodRandom,
       addActiveTag,
       deleteActiveTag, 
+      addInactiveTag,
+      deleteInactiveTag,
       getRandomTags,
     } = this.props;
     return(
@@ -75,10 +78,13 @@ class TagPage extends Component{
         <TagList 
           isMobile={isMobile}
           activeTags={activeTags}
+          inactiveTags={inactiveTags}
           showTags={showTags}
           getRandom={getRandom}
           addActiveTag={addActiveTag}
           deleteActiveTag={deleteActiveTag}
+          addInactiveTag={addInactiveTag}
+          deleteInactiveTag={deleteInactiveTag}
           getRandomTags={getRandomTags}
           postTags={postTags}/>
       </div>
@@ -92,12 +98,15 @@ TagPage.defaultProps = {
 };
 TagPage.propTypes = {
   activeTags: PropTypes.array.isRequired,
+  inactiveTags: PropTypes.array.isRequired,
   isMobile: PropTypes.bool.isRequired,
   getRandom: PropTypes.object.isRequired,
   getFoodRandom: PropTypes.object.isRequired,
 
   addActiveTag: PropTypes.func.isRequired,
   deleteActiveTag: PropTypes.func.isRequired,
+  addInactiveTag: PropTypes.func.isRequired,
+  deleteInactiveTag: PropTypes.func.isRequired,
   getTags: PropTypes.func.isRequired,
   getRandomTags: PropTypes.func.isRequired,
   postTags: PropTypes.func.isRequired,
@@ -106,6 +115,7 @@ TagPage.propTypes = {
 const mapStateToProps = (state) => {
   return {
     activeTags: state.tag.activeTags,
+    inactiveTags: state.tag.inactiveTags,
     getRandom: state.tag.getRandom,
     getFoodRandom: state.food.getRandom,
   };
@@ -118,6 +128,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     deleteActiveTag : (index) => {
       return dispatch(deleteActiveTag(index));
+    },
+    addInactiveTag : (tag) => {
+      return dispatch(addInactiveTag(tag));
+    },
+    deleteInactiveTag : (index) => {
+      return dispatch(deleteInctiveTag(index));
     },
     getTags : () => {
       return dispatch(getTags());

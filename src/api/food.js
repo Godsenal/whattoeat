@@ -41,8 +41,8 @@ export function getFoodsByTag(tag){
     });
 }
 
-export function getFoodsByTags(tags){
-  return axios.post(url+'/tags',{tags})
+export function getFoodsByTags(tags,untags = []){
+  return axios.post(url+'/tags',{tags, untags})
     .then((res)=>{
       return {res};
     }).catch((err)=>{

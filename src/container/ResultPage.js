@@ -26,6 +26,7 @@ class ResultPage extends Component{
     const {
       isMobile, 
       activeTags, 
+      inactiveTags,
       get, 
       update, 
       post, 
@@ -51,6 +52,7 @@ class ResultPage extends Component{
         }
         <Result 
           activeTags={activeTags}
+          inactiveTags={inactiveTags}
           getByTags={getByTags}
           getRandom={getRandom}
           getFoodsByTags={getFoodsByTags}
@@ -80,6 +82,7 @@ ResultPage.defaultProps = {
 ResultPage.propTypes = {
   isMobile: PropTypes.bool.isRequired,
   activeTags: PropTypes.array.isRequired,
+  inactiveTags: PropTypes.array.isRequired,
   post: PropTypes.object.isRequired,
   get: PropTypes.object.isRequired,
   getRandom: PropTypes.object.isRequired,
@@ -103,6 +106,7 @@ ResultPage.propTypes = {
 const mapStateToProps = (state) => {
   return {
     activeTags: state.tag.activeTags,
+    inactiveTags: state.tag.inactiveTags,
     post: state.food.post,
     get: state.food.get,
     getRandom: state.food.getRandom,
@@ -118,8 +122,8 @@ const mapDispatchToProps = (dispatch) => {
     getFoods : () => {
       return dispatch(getFoods());
     },
-    getRandomFood : (tags) => {
-      return dispatch(getRandomFood(tags));
+    getRandomFood : (tags,untags) => {
+      return dispatch(getRandomFood(tags,untags));
     },
     getRandomFoodClear : () => {
       return dispatch(getRandomFoodClear());

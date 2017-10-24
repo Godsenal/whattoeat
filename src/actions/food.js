@@ -33,10 +33,11 @@ function action(type, payload = {}) {
   return {type, ...payload}
 }
 */
-export function getRandomFood(tags){
+export function getRandomFood(tags,untags = []){
   return{
     type: GET_RANDOM_FOOD,
-    tags
+    tags,
+    untags
   };
 }
 export function getRandomFoodSuccess(data){
