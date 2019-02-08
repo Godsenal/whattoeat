@@ -2,25 +2,16 @@ import {
   GET_RANDOM_FOOD,
   GET_RANDOM_FOOD_SUCCESS,
   GET_RANDOM_FOOD_FAILURE,
-  GET_RANDOM_FOOD_CLEAR,
   GET_FOODS,
   GET_FOODS_SUCCESS,
   GET_FOODS_FAILURE,
-  GET_FOODS_BY_SCROLL,
-  GET_FOODS_BY_SCROLL_SUCCESS,
-  GET_FOODS_BY_SCROLL_FAILURE,
+  GET_FOODS_LIST,
+  GET_FOODS_LIST_SUCCESS,
+  GET_FOODS_LIST_FAILURE,
+  CLEAR_FOODS_LIST,
   GET_FOOD_BY_NAME,
   GET_FOOD_BY_NAME_SUCCESS,
   GET_FOOD_BY_NAME_FAILURE,
-  GET_FOODS_BY_TAG,
-  GET_FOODS_BY_TAG_SUCCESS,
-  GET_FOODS_BY_TAG_FAILURE,
-  GET_FOODS_BY_TAGS,
-  GET_FOODS_BY_TAGS_SUCCESS,
-  GET_FOODS_BY_TAGS_FAILURE,
-  GET_FOODS_BY_SEARCH,
-  GET_FOODS_BY_SEARCH_SUCCESS,
-  GET_FOODS_BY_SEARCH_FAILURE,
   POST_FOODS,
   POST_FOODS_SUCCESS,
   POST_FOODS_FAILURE,
@@ -33,175 +24,116 @@ function action(type, payload = {}) {
   return {type, ...payload}
 }
 */
-export function getRandomFood(tags){
-  return{
+export function getRandomFood(tags) {
+  return {
     type: GET_RANDOM_FOOD,
-    tags
+    tags,
   };
 }
-export function getRandomFoodSuccess(data){
-  return{
-    type:GET_RANDOM_FOOD_SUCCESS,
-    ...data
-  }
-}
-export function getRandomFoodFailure(error){
-  return{
-    type:GET_RANDOM_FOOD_FAILURE,
-    ...error
-  }
-}
-export function getRandomFoodClear(){
-  return{
-    type:GET_RANDOM_FOOD_CLEAR
+export function getRandomFoodSuccess(data) {
+  return {
+    type: GET_RANDOM_FOOD_SUCCESS,
+    ...data,
   };
 }
-export function getFoods(){
-  return{
+export function getRandomFoodFailure(error) {
+  return {
+    type: GET_RANDOM_FOOD_FAILURE,
+    ...error,
+  };
+}
+export function clearFoodsList() {
+  return {
+    type: CLEAR_FOODS_LIST,
+  };
+}
+export function getFoods() {
+  return {
     type: GET_FOODS,
   };
 }
-export function getFoodsSuccess(data){
-  return{
+export function getFoodsSuccess(data) {
+  return {
     type: GET_FOODS_SUCCESS,
-    ...data
+    ...data,
   };
 }
-export function getFoodsFailure(error){
-  return{
+export function getFoodsFailure(error) {
+  return {
     type: GET_FOODS_FAILURE,
-    ...error
+    ...error,
   };
 }
-export function getFoodsByScroll(isInitial = false, id = 0){
-  return{
-    type: GET_FOODS_BY_SCROLL,
-    isInitial,
-    id
+export function getFoodsList(payload) {
+  return {
+    type: GET_FOODS_LIST,
+    payload,
   };
 }
-export function getFoodsByScrollSuccess(data){
-  return{
-    type: GET_FOODS_BY_SCROLL_SUCCESS,
-    ...data
+export function getFoodsListSuccess(data) {
+  return {
+    type: GET_FOODS_LIST_SUCCESS,
+    ...data,
   };
 }
-export function getFoodsByScrollFailure(error){
-  return{
-    type: GET_FOODS_BY_SCROLL_FAILURE,
-    ...error
+export function getFoodsListFailure(error) {
+  return {
+    type: GET_FOODS_LIST_FAILURE,
+    ...error,
   };
 }
-export function getFoodByName(name){
-  return{
+export function getFoodByName(name) {
+  return {
     type: GET_FOOD_BY_NAME,
-    name
+    name,
   };
 }
-export function getFoodByNameSuccess(data){
-  return{
+export function getFoodByNameSuccess(data) {
+  return {
     type: GET_FOOD_BY_NAME_SUCCESS,
-    ...data
+    ...data,
   };
 }
-export function getFoodByNameFailure(error){
-  return{
+export function getFoodByNameFailure(error) {
+  return {
     type: GET_FOOD_BY_NAME_FAILURE,
-    ...error
+    ...error,
   };
 }
-
-export function getFoodsByTag(tag){
-  return{
-    type: GET_FOODS_BY_TAG,
-    tag
-  };
-}
-export function getFoodsByTagSuccess(data){
-  return{
-    type: GET_FOODS_BY_TAG_SUCCESS,
-    ...data
-  };
-}
-export function getFoodsByTagFailure(error){
-  return{
-    type: GET_FOODS_BY_TAG_FAILURE,
-    ...error
-  };
-}
-
-export function getFoodsByTags(tags){
-  return{
-    type: GET_FOODS_BY_TAGS,
-    tags
-  };
-}
-export function getFoodsByTagsSuccess(data){
-  return{
-    type: GET_FOODS_BY_TAGS_SUCCESS,
-    ...data
-  };
-}
-export function getFoodsByTagsFailure(error){
-  return{
-    type: GET_FOODS_BY_TAGS_FAILURE,
-    ...error
-  };
-}
-
-export function getFoodsBySearch(name){
-  return{
-    type: GET_FOODS_BY_SEARCH,
-    name
-  };
-}
-export function getFoodsBySearchSuccess(data){
-  return{
-    type:GET_FOODS_BY_SEARCH_SUCCESS,
-    ...data
-  };
-}
-export function getFoodsBySearchFailure(error){
-  return{
-    type: GET_FOODS_BY_SEARCH_FAILURE,
-    ...error
-  };
-}
-
-export function postFoods(foods){
-  return{
+export function postFoods(foods) {
+  return {
     type: POST_FOODS,
-    foods
+    foods,
   };
 }
-export function postFoodsSuccess(data){
-  return{
+export function postFoodsSuccess(data) {
+  return {
     type: POST_FOODS_SUCCESS,
-    ...data
+    ...data,
   };
 }
-export function postFoodsFailure(error){
-  return{
+export function postFoodsFailure(error) {
+  return {
     type: POST_FOODS_FAILURE,
-    ...error
+    ...error,
   };
 }
 
-export function updateFood(food){
-  return{
+export function updateFood(food) {
+  return {
     type: UPDATE_FOOD,
-    food
+    food,
   };
 }
-export function updateFoodSuccess(data){
-  return{
+export function updateFoodSuccess(data) {
+  return {
     type: UPDATE_FOOD_SUCCESS,
-    ...data
+    ...data,
   };
 }
-export function updateFoodFailure(error){
-  return{
+export function updateFoodFailure(error) {
+  return {
     type: UPDATE_FOOD_FAILURE,
-    ...error
+    ...error,
   };
 }

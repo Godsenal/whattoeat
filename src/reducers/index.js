@@ -1,11 +1,11 @@
 import tag from './tag';
 import food from './food';
-import environment from './environment';
 
 import { combineReducers } from 'redux';
 
 const appReducers = combineReducers({
-  tag, food, environment
+  tag,
+  food,
 });
 /*
 const rootReducer = (state, action) => {

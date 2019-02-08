@@ -1,43 +1,43 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from '../style/TagList.scss';
 
-
 const cx = classNames.bind(styles);
 class TagList extends Component {
-  constructor(){
+  constructor() {
     super();
   }
-  handleClick(tag,isActive,activeIndex){
-    const {addActiveTag, deleteActiveTag} = this.props;
-    if(isActive){
+  handleClick(tag, isActive, activeIndex) {
+    const { addActiveTag, deleteActiveTag } = this.props;
+    if (isActive) {
       deleteActiveTag(activeIndex);
-    }
-    else{
+    } else {
       addActiveTag(tag);
     }
-    
   }
-  render(){
-    const {activeTags, showTags, isMobile} = this.props;
+  render() {
+    const { activeTags, showTags } = this.props;
     return (
       <div className={cx('tagListInnerContainer')}>
-        {showTags.map((tag,index)=>{
+        {showTags.map((tag, index) => {
           let isActive = false;
           let activeIndex = 0;
-          for(var i=0; i<activeTags.length; ++i){
-            if(activeTags[i] == tag.name){
+          for (var i = 0; i < activeTags.length; ++i) {
+            if (activeTags[i] == tag.name) {
               isActive = true;
               activeIndex = i;
               break;
             }
           }
-          return(
+          return (
             <div
-              className={cx(isActive?'activeTag':'normalTag')}
-              onClick={()=>this.handleClick(tag.name,isActive,activeIndex)} 
-              key={index}>{tag.name}</div>
+              className={cx(isActive ? 'activeTag' : 'normalTag')}
+              onClick={() => this.handleClick(tag.name, isActive, activeIndex)}
+              key={index}
+            >
+              {tag.name}
+            </div>
           );
         })}
       </div>
@@ -46,20 +46,20 @@ class TagList extends Component {
 }
 
 TagList.defaultProps = {
-  isMobile: false,
   activeTags: [],
   showTags: [],
-  addActiveTag: ()=>{console.log('TagList props error');},
-  deleteActiveTag: ()=>{console.log('TagList props error');},
+  addActiveTag: () => {
+    console.log('TagList props error');
+  },
+  deleteActiveTag: () => {
+    console.log('TagList props error');
+  },
 };
 TagList.propTypes = {
-  isMobile: PropTypes.bool.isRequired,
   activeTags: PropTypes.array.isRequired,
   showTags: PropTypes.array.isRequired,
-  getRandom: PropTypes.object.isRequired,
 
   addActiveTag: PropTypes.func.isRequired,
   deleteActiveTag: PropTypes.func.isRequired,
-  getRandomTags: PropTypes.func.isRequired,
 };
 export default TagList;

@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
 const FoodSchema = new Schema({
-  name: {type: String, unique: true},
-  tags: Array
+  name: { type: String, unique: true },
+  tags: Array,
 });
 
 var collectionName = 'Foods';
-export default mongoose.model('Foods', FoodSchema, collectionName);
+module.exports = mongoose.model('Foods', FoodSchema, collectionName);

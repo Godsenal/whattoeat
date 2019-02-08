@@ -1,83 +1,54 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-
-import FaClose from 'react-icons/lib/fa/close';
+import usePrevious from '../hooks/usePrevious';
 import styles from '../style/Modal.scss';
 
 const cx = classNames.bind(styles);
 
-export default class Modal extends Component {
-  constructor(){
-    super();
-    this.state = {
-      display: 'none',
-      show: false,
-    };
-  }
+function Modal({
+  show = false,
+  toggleModal,
+  header = '',
+  width = '50%',
+  height = '70%',
+  children,
+}) {
+  const containerEl = useRef(null);
+  const prevShow = usePrevious(show);
 
-  componentDidUpdate = (prevProps, prevState) => {
-    /* SCROLL TO TOP WHEN MODAL OPENS AGAIN */
-    if(!prevProps.open && this.props.open){
-      const el = ReactDOM.findDOMNode(this.content);
-      if(el){
-        el.scrollTop = 0;
-      }
+  useEffect(() => {
+    if (prevShow !== show) {
+      containerEl.current.scrollTop = 0;
     }
-  }
-  
-  componentWillReceiveProps = (nextProps) => {
-    if(!this.props.open && nextProps.open){
-      this.setState({
-        display: 'block'
-      });
-      setTimeout(()=>{
-        this.setState({
-          show: true
-        });
-      },10);
-    }
-    else if(this.props.open && !nextProps.open){
-      this.setState({
-        show: false,
-      });
-      setTimeout(()=>{
-        this.setState({
-          display: 'none',
-        });
-      },300); //transition time
-    }
-  }
-  render() {
-    const {display, show} = this.state;
-    const {handleToggleModal, header, children, width, height} = this.props;
-
-    return (
-      <div style={{display, width, height}} className={cx('modalContainer',show?'modalContainer-active':null)}>
-        <div className={cx('modalHeader')}>
-          <div><span>{header}</span></div>
-        </div>
-        <div ref={ref=>this.content=ref} className={cx('modalContent')}>
-          {children}
-        </div>
-        <div className={cx('modalFooter')}>
-          <button className={cx('modalAction')} onClick={handleToggleModal}>닫기</button>
+  }, [show]);
+  return (
+    <div
+      style={{ width, height }}
+      className={cx('modalContainer', show ? 'modalContainer-active' : null)}
+    >
+      <div className={cx('modalHeader')}>
+        <div>
+          <span>{header}</span>
         </div>
       </div>
-    );
-  }
+      <div ref={containerEl} className={cx('modalContent')}>
+        {show && children}
+      </div>
+      <div className={cx('modalFooter')}>
+        <button className={cx('modalAction')} onClick={toggleModal}>
+          닫기
+        </button>
+      </div>
+    </div>
+  );
 }
-
-Modal.defaultProps = {
-  width: '50%',
-  height: '70%'
+Modal.propTypes = {
+  show: PropTypes.bool,
+  toggleModal: PropTypes.func.isRequired,
+  header: PropTypes.string,
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  children: PropTypes.node,
 };
-Modal.propTypes ={
-  width: PropTypes.string,
-  height: PropTypes.string,
-  open: PropTypes.bool.isRequired,
-  header: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-  handleToggleModal: PropTypes.func.isRequired,
-};
+export default Modal;

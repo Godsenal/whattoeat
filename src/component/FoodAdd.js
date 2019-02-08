@@ -1,179 +1,138 @@
-import React, { Component } from 'react';
+import React, {
+  useReducer,
+  useContext,
+  useMemo,
+  useEffect,
+  useRef,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-import { toast } from 'react-toastify';
 
-import FaClose from 'react-icons/lib/fa/close';
-import FaSpoon from 'react-icons/lib/fa/spoon';
-import FaTags from 'react-icons/lib/fa/tags';
+import notifier from '../utils/notifier';
 
-import {Modal, TagFinder} from './';
+import { FaRegTimesCircle, FaBeer, FaTags } from 'react-icons/fa';
+import WindowContext from '../contexts/window';
+import { Modal, TagFinder } from './';
 
 import styles from '../style/FoodAdd.scss';
 const cx = classNames.bind(styles);
 
-const re=/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
-
-const checkAndReplace = (value) => {
-  let word = value;
-  let hasSpecial = re.test(word);
-  if(word && hasSpecial){
-    word = word.replace(re,'');
-  }
-  return word;
-};
-
-export default class FoodAdd extends Component {
-  constructor(){
-    super();
-    this.state = {
-      open: false,
+function FoodAdd({ post, postFoods }) {
+  const [state, setState] = useReducer(
+    (state, newState) => ({ ...state, ...newState }),
+    {
       tags: [],
-      value: '',
-      wordValid: true,
-    };
-  }
-  componentWillReceiveProps = (nextProps) => {
-    if(this.props.post.status !== nextProps.post.status){
-      
-      switch(nextProps.post.status){
-      case 'SUCCESS':
-        toast.info('음식 등록 성공!',{
-          className: 'toastContainer_info'
-        });
-        this.setState({
-          open: false,
-          tags: [],
-          value: '',
-        });
-        break;
-      case 'FAILURE':
-        if(toast.code == 1){
-          toast.error('DB에러',{
-            className: 'toastContainer'
-          });
-        }
-        else{
-          toast.error('음식 등록 실패...이미 있는 이름',{
-            className: 'toastContainer'
-          });
-          this.setState({
-            value: '',
-          });
-        }
-        break;
-      }
+      show: false,
+    },
+  );
+  const { size } = useContext(WindowContext);
+  const isMobile = useMemo(() => size.width < 800, [size.width]);
+  const inputEl = useRef();
+  const { isValid, tags, show } = state;
+  useEffect(() => {
+    if (post.status === 'SUCCESS') {
+      notifier.notify({
+        message: '성공적으로 등록되었습니다.',
+        type: 'success',
+      });
+    } else if (post.status === 'FAILURE') {
+      notifier.notify({
+        message: '등록에 실패하였습니다. 다시 시도해주세요.',
+        type: 'error',
+      });
     }
-  }
-  
-  handleChange = (e) => {
-    let value = checkAndReplace(e.target.value);
-    this.setState({
-      value,
-      wordValid: true,
+  }, [post.status]);
+  const addTag = candidate => {
+    if (state.tags.some(tag => tag === candidate)) {
+      return notifier.notify({
+        message: '이미 있는 태그입니다.',
+        type: 'error',
+      });
+    }
+    setState({
+      tags: [...tags, candidate],
     });
-  }
-  handleToggleModal = () => {
-    this.setState({
-      open: !this.state.open,
-      value :'',
-      tags: [],
-      wordValid: true,
+  };
+  const deleteTag = index => () => {
+    setState({
+      tags: tags.filter((_, i) => i !== index),
     });
-  }
-  handleAddTag = (tag) => {
-    const {tags} = this.state;
-    var isIn = false;
-    for(var i = 0; i < tags.length; i++){
-      if(tags[i] == tag){
-        isIn = true;
-        break;
-      }
-    }
-    if(!isIn){
-      this.setState({
-        tags: [...tags,tag]
+  };
+  const addFood = () => {
+    const value = inputEl.current.value;
+    if (!value || !value.trim()) {
+      notifier.notify({
+        type: 'error',
+        message: '음식 이름을 입력해주세요!',
       });
+      return;
     }
-    else{
-      toast.error('이미 있는 태그입니다.',{
-        className: 'toastContainer'
+    if (!tags.length) {
+      notifier.notify({
+        type: 'error',
+        message: '적어도 한 가지 이상의 태그를 골라주세요!',
       });
+      return;
     }
-    
-  }
-  handleDeleteTag = (index) => {
-    const {tags} = this.state;
-    this.setState({
-      tags: [...tags.slice(0,index),...tags.slice(index+1)]
+    postFoods([{ name: value.trim(), tags }]);
+  };
+  const toggleModal = () => {
+    setState({
+      show: !show,
     });
-  }
-  handleAddFood = () => {
-    const {value, tags} = this.state;
-    if(!value || !value.trim()){
-      toast.error('음식 이름을 입력해 주세요!',{
-        className: 'toastContainer'
-      });
-      this.setState({
-        wordValid: false,
-      });
-      return ;
-    }
-    if(!tags.length){
-      toast.error('적어도 한 가지 이상의 태그를 골라주세요!',{
-        className: 'toastContainer'
-      });
-      return ;
-    }
-    this.props.postFoods([{name: value.trim(), tags}]);
-  }
-  render() {
-    const {open, value, tags, wordValid} = this.state;
-    const {isMobile} = this.props;
-    return (
-      <div>
-        <div className={cx('foodAddButton')}>
-          <a onClick={this.handleToggleModal}>음식 추가!</a>
-        </div>
-        <Modal 
-          open={open}
-          header={'음식 추가'} 
-          width={isMobile?'90%':'50%'}
-          handleToggleModal={this.handleToggleModal}>
-          <div className={cx('foodAddContainer')}>
-            <div>
-              <span><FaSpoon/> 음식명</span>
-              <input 
-                className={cx('foodAddInput',!wordValid?'foodAddInputError':null)} 
-                value={value}
-                onChange={this.handleChange} />
-            </div>
-            
-            <div style={{marginTop: 20}}>
-              <span ><FaTags/> 태그 추가</span>
-              <TagFinder 
-                isAdd={true} 
-                handleAddTag={this.handleAddTag}/>
-              <div className={cx('foodAddTags')}>
-                {tags.map((tag,index)=>{
-                  return (
-                    <span key={index} className={cx('foodAddTag')}>
-                      {tag}
-                      <span onClick={()=>this.handleDeleteTag(index)}><FaClose/></span>
+  };
+  return (
+    <div>
+      <div className={cx('foodAddButton')}>
+        <a onClick={toggleModal}>음식 추가!</a>
+      </div>
+      <Modal
+        show={show}
+        header={'음식 추가'}
+        width={isMobile ? '90%' : '50%'}
+        toggleModal={toggleModal}
+      >
+        <div className={cx('foodAddContainer')}>
+          <div>
+            <span>
+              <FaBeer /> 음식명
+            </span>
+            <input
+              className={cx(
+                'foodAddInput',
+                !isValid ? 'foodAddInputError' : null,
+              )}
+              ref={inputEl}
+            />
+          </div>
+
+          <div style={{ marginTop: 20 }}>
+            <span>
+              <FaTags /> 태그 추가
+            </span>
+            <TagFinder isAdd={true} handleAddTag={addTag} />
+            <div className={cx('foodAddTags')}>
+              {tags.map((tag, index) => {
+                return (
+                  <span key={index} className={cx('foodAddTag')}>
+                    {tag}
+                    <span onClick={deleteTag(index)}>
+                      <FaRegTimesCircle />
                     </span>
-                  );
-                })}
-              </div>
-            </div>
-            <div className={cx('foodAddConfirm')} onClick={this.handleAddFood}>
-              추가!
+                  </span>
+                );
+              })}
             </div>
           </div>
-        </Modal>
-      </div>
-    );
-  }
+          <div className={cx('foodAddConfirm')} onClick={addFood}>
+            추가!
+          </div>
+        </div>
+      </Modal>
+    </div>
+  );
 }
+export default FoodAdd;
 
 FoodAdd.propTypes = {
   isMobile: PropTypes.bool,

@@ -1,7 +1,7 @@
 @import 'util/button.scss';
 @import 'util/color.scss';
 @import 'util/boxshadow.scss';
-.container{
+.container {
   width: 95%;
   box-sizing: border-box;
   padding: 15px;
@@ -9,33 +9,33 @@
   text-align: center;
 }
 
-.startButton{
-  @media screen and (min-width: 1000px){
+.startButton {
+  @media screen and (min-width: 1000px) {
     font-size: 32px;
     width: 35%;
   }
-  @media screen and (max-width: 999px){
+  @media screen and (max-width: 999px) {
     font-size: 26px;
     width: 50%;
   }
-  
+
   padding: 20px;
   margin: auto;
   position: relative;
-  font-family: "Hanna", "Ubuntu", sans-serif;
+  font-family: 'Hanna', 'Ubuntu', sans-serif;
   @include boxShadowBottomRightThinLighter;
-  
+
   @include button-fill($light-red);
-  
+
   transition: padding 0.3s ease-in-out, bottom 0.3s ease-in-out;
 }
 
-.startButton-in-active{
+.startButton-in-active {
   padding-bottom: 100px;
   cursor: auto;
 }
 
-.result{
+.result {
   position: absolute;
   text-align: center;
   width: 100%;
@@ -45,16 +45,16 @@
   box-sizing: border-box;
   margin: 0 -20px;
   font-weight: 600;
-  font-family: "Hanna", "Ubuntu", sans-serif;
-  @media screen and (min-width: 1000px){
+  font-family: 'Hanna', 'Ubuntu', sans-serif;
+  @media screen and (min-width: 1000px) {
     font-size: 36px;
   }
-  @media screen and (max-width: 999px){
+  @media screen and (max-width: 999px) {
     font-size: 32px;
   }
   color: $dark-yellow;
 }
 
-.result-in-active{
+.result-in-active {
   opacity: 1;
 }

@@ -1,12 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import 'babel-polyfill';
-
-import { 
-  BrowserRouter as Router, 
-  Route, 
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import { Provider } from 'react-redux';
 
@@ -17,9 +12,9 @@ ReactDOM.render(
   <Provider store={configureStore()}>
     <Router>
       <div>
-        <Route exact path="/" component={App}/>
+        <Route exact path="/" component={App} />
       </div>
     </Router>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );

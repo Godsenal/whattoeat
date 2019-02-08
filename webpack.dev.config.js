@@ -1,79 +1,95 @@
-var webpack = require('webpack');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: [
-    './src/index.js',
-    'webpack-dev-server/client?http://0.0.0.0:3001',
-    'webpack/hot/only-dev-server'
-  ],
+  mode: 'development',
+  devtool: 'inline-source-map',
+  entry: ['./src/index.js'],
   output: {
-    path: '/',
-    filename: 'bundle.js'
+    path: __dirname + '/dist',
+    publicPath: '/',
+    filename: '[name].bundle.js',
+    chunkFilename: '[name].bundle.js',
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
   },
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development'),
+    }),
+    new HtmlWebpackPlugin({
+      template: __dirname + '/public/index.html',
+    }),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
   ],
   devServer: {
+    open: true,
     hot: true,
-    filename: 'bundle.js',
+    port: 8080,
     publicPath: '/',
     historyApiFallback: true,
-    contentBase: './public',
+    contentBase: './dist',
     proxy: {
-        "**": "http://localhost:3000"
-    }
+      '**': 'http://localhost:3000',
+    },
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
-        query: {
-            presets: ["react","env"],
-            plugins: ["react-hot-loader/babel"]
-        }
       },
-      { 
-        test: /\.jsx$/, 
-        loader: 'babel-loader', 
-        exclude: /node_modules/,
+      {
+        test: /\.(png|jpg|gif|svg)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(png|jpg|gif|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]',
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
-        include: [/node_modules/,/style\/quill/],
-        loader: 'style-loader!css-loader'
-        //loader: 'style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
-      },
-      {
-        test: /\.css$/,
-        exclude: [/node_modules/,/style\/quill/],
-        loader: 'style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
+        loader:
+          'style-loader!css-loader?modules&importLoaders=true&localIdentName=[name]__[local]___[hash:base64:5]',
       },
       {
         test: /\.scss$/,
-        use:
-        [
+        use: [
           {
-            loader: 'style-loader'
+            loader: 'style-loader',
           },
           {
             loader: 'css-loader',
-            options:
-            {
-              sourceMap: true
-            }
+            options: {
+              sourceMap: true,
+            },
           },
           {
             loader: 'sass-loader',
-            options:
-            {
-              sourceMap: true
-            }
-          }]
-      }
-    ]
-  }
-}
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+    ],
+  },
+};

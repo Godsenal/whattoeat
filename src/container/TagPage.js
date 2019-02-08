@@ -1,89 +1,59 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { connect } from 'react-redux';
-import { toast } from 'react-toastify';
 
 import { TagList, TagFinder } from '../component';
-import {addActiveTag, deleteActiveTag, getTags, getRandomTags, postTags } from '../actions/tag';
+import {
+  addActiveTag,
+  deleteActiveTag,
+  getTags,
+  getRandomTags,
+  postTags,
+} from '../actions/tag';
 
-import 'react-toastify/dist/ReactToastify.min.css';
 import styles from '../style/TagPage.scss';
-import toastStyle from '../style/Toast.scss';
 const cx = classNames.bind(styles);
 
-class TagPage extends Component{
-  constructor(){
-    super();
-    this.state = {
-      showTags: [],
-    };
-  }
-  componentDidMount = () => {
-    const {getRandomTags} = this.props;
+function TagPage({
+  activeTags,
+  getFoodRandom,
+  getRandom,
+  getRandomTags,
+  ...props
+}) {
+  const [showTags, setShowTags] = useState([]);
+  // mount 시 random 태그 10개 fetch
+  useEffect(() => {
     getRandomTags(10);
-  }
-  
-  componentWillReceiveProps = (nextProps) => {
-    if(this.props.getRandom !== nextProps.getRandom){
-      if(nextProps.getRandom.status === 'SUCCESS'){
-        this.setState({
-          showTags: nextProps.getRandom.tags
-        });
-      }
-    }
-  }
+  }, []);
+  // random tag 바뀔시 현재 state 업데이트( 왜 이렇게 짰을까 .. )
+  useEffect(() => {
+    setShowTags(getRandom.tags);
+  }, [getRandom.tags]);
 
-  handleAddTag = (tag) => {
-    const {showTags} = this.state;
-    var isIn = false;
-    for(var i = 0; i < showTags.length; i++){
-      if(showTags[i].name == tag){
-        isIn = true;
-        break;
+  const addTag = useCallback(
+    tag => {
+      if (!showTags.some(showTag => showTag.name === tag.name)) {
+        setShowTags([...showTags, { name: tag }]);
+        addActiveTag(tag);
       }
-    }
-    if(!isIn){
-      this.setState({
-        showTags: [...showTags,{name:tag}]
-      });
-      this.props.addActiveTag(tag);
-    }
-    else{
-      toast.error('이미 있는 태그입니다.',{
-        className: 'toastContainer'
-      });
-    }
-    
-  }
-  
-  render(){
-    const {showTags} = this.state;
-    const {
-      activeTags, 
-      isMobile, 
-      getRandom,
-      getFoodRandom,
-      addActiveTag,
-      deleteActiveTag, 
-      getRandomTags,
-    } = this.props;
-    return(
-      <div className={cx('tagContainer',getFoodRandom.status !== 'INIT' && getFoodRandom.status !== 'FAILURE'?'tagContainer-inactive':null)}>
-        <TagFinder
-          handleAddTag={this.handleAddTag}/>
-        <TagList 
-          isMobile={isMobile}
-          activeTags={activeTags}
-          showTags={showTags}
-          getRandom={getRandom}
-          addActiveTag={addActiveTag}
-          deleteActiveTag={deleteActiveTag}
-          getRandomTags={getRandomTags}
-          postTags={postTags}/>
-      </div>
-    );
-  }
+    },
+    [showTags],
+  );
+  return (
+    <div
+      className={cx(
+        'tagContainer',
+        getFoodRandom.status !== 'INIT' &&
+          getFoodRandom.status !== 'FAILURE' &&
+          'tagContainer-inactive',
+      )}
+    >
+      <TagFinder handleAddTag={addTag} />
+      <TagList {...props} activeTags={activeTags} showTags={showTags} />
+    </div>
+  );
 }
 
 TagPage.defaultProps = {
@@ -103,7 +73,7 @@ TagPage.propTypes = {
   postTags: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     activeTags: state.tag.activeTags,
     getRandom: state.tag.getRandom,
@@ -111,24 +81,15 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addActiveTag : (tag) => {
-      return dispatch(addActiveTag(tag));
-    },
-    deleteActiveTag : (index) => {
-      return dispatch(deleteActiveTag(index));
-    },
-    getTags : () => {
-      return dispatch(getTags());
-    },
-    getRandomTags : (size) => {
-      return dispatch(getRandomTags(size));
-    },
-    postTags : (tags) => {
-      return dispatch(postTags(tags));
-    }
-  };
+const mapDispatchToProps = {
+  addActiveTag,
+  deleteActiveTag,
+  getTags,
+  getRandomTags,
+  postTags,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TagPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TagPage);

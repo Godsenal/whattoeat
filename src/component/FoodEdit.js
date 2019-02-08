@@ -3,65 +3,60 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { toast } from 'react-toastify';
 
-import FaClose from 'react-icons/lib/fa/close';
-import FaSpoon from 'react-icons/lib/fa/spoon';
-import FaTags from 'react-icons/lib/fa/tags';
+import { FaRegTimesCircle, FaBeer, FaTags } from 'react-icons/fa';
 
-import {TagFinder} from './';
+import { TagFinder } from './';
 
 import styles from '../style/FoodEdit.scss';
 const cx = classNames.bind(styles);
 
-const re=/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+const re = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
 
-const checkAndReplace = (value) => {
+const checkAndReplace = value => {
   let word = value;
   let hasSpecial = re.test(word);
-  if(word && hasSpecial){
-    word = word.replace(re,'');
+  if (word && hasSpecial) {
+    word = word.replace(re, '');
   }
   return word;
 };
 
 export default class FoodEdit extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      _id:'',
-      value: '',
-      tags: [],
+      ...props.food,
+      value: props.food.name,
       wordValid: true,
     };
   }
-  componentWillReceiveProps = (nextProps) => {
-    if(this.props.food !== nextProps.food){
-      const {_id, name, tags} = nextProps.food;
+  componentWillReceiveProps = nextProps => {
+    if (this.props.food !== nextProps.food) {
+      const { _id, name, tags } = nextProps.food;
       this.setState({
         _id,
         value: name,
         tags,
       });
     }
-    
-    if(this.props.update.status !== nextProps.update.status){
-      
-      switch(nextProps.update.status){
+
+    if (this.props.update.status !== nextProps.update.status) {
+      switch (nextProps.update.status) {
       case 'SUCCESS':
-        toast.info('음식 수정 성공!',{
-          className: 'toastContainer_info'
+        toast.info('음식 수정 성공!', {
+          className: 'toastContainer_info',
         });
         this.handleToggleModal();
         break;
       case 'FAILURE':
-        if(toast.code == 1){
-          toast.error('DB에러',{
-            className: 'toastContainer'
+        if (toast.code == 1) {
+          toast.error('DB에러', {
+            className: 'toastContainer',
           });
           this.handleToggleModal();
-        }
-        else{
-          toast.error('음식 수정 실패...이미 있는 이름',{
-            className: 'toastContainer'
+        } else {
+          toast.error('음식 수정 실패...이미 있는 이름', {
+            className: 'toastContainer',
           });
           this.setState({
             value: '',
@@ -70,66 +65,64 @@ export default class FoodEdit extends Component {
         break;
       }
     }
-  }
-  
-  handleChange = (e) => {
+  };
+
+  handleChange = e => {
     let value = checkAndReplace(e.target.value);
     this.setState({
       value,
       wordValid: true,
     });
-  }
+  };
   handleToggleModal = () => {
     this.setState({
-      value :'',
+      value: '',
       tags: [],
       wordValid: true,
     });
     this.props.handleToggleModal();
-  }
-  handleAddTag = (tag) => {
-    const {tags} = this.state;
+  };
+  handleAddTag = tag => {
+    const { tags } = this.state;
     var isIn = false;
-    for(var i = 0; i < tags.length; i++){
-      if(tags[i] == tag){
+    for (var i = 0; i < tags.length; i++) {
+      if (tags[i] == tag) {
         isIn = true;
         break;
       }
     }
-    if(!isIn){
+    if (!isIn) {
       this.setState({
-        tags: [...tags,tag]
+        tags: [...tags, tag],
+      });
+    } else {
+      toast.error('이미 있는 태그입니다.', {
+        className: 'toastContainer',
       });
     }
-    else{
-      toast.error('이미 있는 태그입니다.',{
-        className: 'toastContainer'
-      });
-    }
-    
-  }
-  handleDeleteTag = (index) => {
-    const {tags} = this.state;
+  };
+  handleDeleteTag = index => {
+    const { tags } = this.state;
     this.setState({
-      tags: [...tags.slice(0,index),...tags.slice(index+1)]
+      tags: [...tags.slice(0, index), ...tags.slice(index + 1)],
     });
-  }
+  };
   handleEditFood = () => {
-    const {_id, value, tags} = this.state;
-    if(!value || !value.trim()){
-      toast.error('음식 이름을 입력해 주세요!',{
-        className: 'toastContainer'
+    const { _id, value, tags } = this.state;
+    if (!value || !value.trim()) {
+      toast.error('음식 이름을 입력해 주세요!', {
+        className: 'toastContainer',
       });
       this.setState({
         wordValid: false,
       });
-      return ;
+      return;
     }
-    if(!tags.length){
-      toast.error('적어도 한 가지 이상의 태그를 골라주세요!',{
-        className: 'toastContainer'
+    if (!tags.length) {
+      toast.error('적어도 한 가지 이상의 태그를 골라주세요!', {
+        className: 'toastContainer',
       });
-      return ;
+      return;
     }
     let food = {
       id: _id,
@@ -137,46 +130,58 @@ export default class FoodEdit extends Component {
       tags,
     };
     this.props.updateFood(food);
-  }
+  };
   render() {
-    const {open} = this.props;
-    const {value, tags, wordValid} = this.state;
+    const { open } = this.props;
+    const { value, tags, wordValid } = this.state;
     return (
       <div className={cx('foodEditContainer')}>
-        {open?
+        {open ? (
           <div>
             <div>
-              <span><FaSpoon/> 음식명</span>
-              <input 
-                className={cx('foodEditInput',!wordValid?'foodEditInputError':null)} 
+              <span>
+                <FaBeer /> 음식명
+              </span>
+              <input
+                className={cx(
+                  'foodEditInput',
+                  !wordValid ? 'foodEditInputError' : null,
+                )}
                 value={value}
-                onChange={this.handleChange} />
+                onChange={this.handleChange}
+              />
             </div>
-            <div style={{marginTop: 20}}>
-              <span ><FaTags/> 태그 추가</span>
-              <TagFinder 
-                isAdd={true} 
-                handleAddTag={this.handleAddTag}/>
+            <div style={{ marginTop: 20 }}>
+              <span>
+                <FaTags /> 태그 추가
+              </span>
+              <TagFinder isAdd={true} handleAddTag={this.handleAddTag} />
               <div className={cx('foodEditTags')}>
-                {tags.map((tag,index)=>{
+                {tags.map((tag, index) => {
                   return (
                     <span key={index} className={cx('foodEditTag')}>
                       {tag}
-                      <span onClick={()=>this.handleDeleteTag(index)}><FaClose/></span>
+                      <span onClick={() => this.handleDeleteTag(index)}>
+                        <FaRegTimesCircle />
+                      </span>
                     </span>
                   );
                 })}
               </div>
             </div>
-            <div className={cx('foodEditConfirm')} onClick={this.handleEditFood}>
+            <div
+              className={cx('foodEditConfirm')}
+              onClick={this.handleEditFood}
+            >
               수정!
             </div>
-          </div>:null}
+          </div>
+        ) : null}
       </div>
     );
   }
 }
-FoodEdit.defaultProps ={
+FoodEdit.defaultProps = {
   open: false,
   food: {
     _id: '',
@@ -191,5 +196,4 @@ FoodEdit.propTypes = {
 
   handleToggleModal: PropTypes.func.isRequired,
   updateFood: PropTypes.func.isRequired,
-
 };

@@ -1,67 +1,43 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames/bind';
-import { connect } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
-
-import { Header} from '../component';
+import { NotiPortal } from 'renoti';
+import { Header } from '../component';
 import { TagPage, ResultPage } from './';
-import {initEnvironment} from '../actions/environment';
+import notifier from '../utils/notifier';
+import WindowContext from '../contexts/window';
 import styles from '../style/App.scss';
+
 const cx = classNames.bind(styles);
 
-class App extends Component{
-  constructor(){
-    super();
-  }
-  componentDidMount() {
-    window.addEventListener('resize', this.props.initEnvironment);
-  }
-  componentWillUnmount() {
-    window.removeEventListener('resize',this.props.initEnvironment);
-  }
-  render(){
-    const {environment} = this.props;
-    const {screenWidth, screenHeight, isMobile} = environment;
-    return(
+function App() {
+  const [size, setSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+    isMobile: window.innerWidth < 800,
+  });
+  const setWindowSize = useCallback(
+    () =>
+      setSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+        isMobile: window.innerWidth < 800,
+      }),
+    [],
+  );
+  useEffect(() => {
+    window.addEventListener('resize', setWindowSize);
+    return () => window.removeEventListener('resize', setWindowSize);
+  }, []);
+  return (
+    <WindowContext.Provider value={{ size, setSize }}>
       <div className={cx('mainContainer')}>
         <Header />
-        <TagPage 
-          isMobile={isMobile}/>
-        <ResultPage
-          isMobile={isMobile}/>
-        <ToastContainer 
-          position="bottom-center"
-          type="error"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-        />
+        <TagPage />
+        <ResultPage isMobile={size.isMobile} />
+        <NotiPortal notifier={notifier} />
       </div>
-    );
-  }
-  
+    </WindowContext.Provider>
+  );
 }
-App.defaultProps = {
-  environment : {},
-  initEnvironment : ()=>{console.log('init Environment props error.');}
-};
-App.propTypes = {
-  environment : PropTypes.object.isRequired,
-  initEnvironment : PropTypes.func.isRequired,
-};
-const mapStateToProps = (state) => {
-  return {
-    environment: state.environment,
-  };
-};
-const mapDispatchToProps = (dispatch) => {
-  return {
-    initEnvironment : () => {
-      return dispatch(initEnvironment());
-    },
-  };
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
