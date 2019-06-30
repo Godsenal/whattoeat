@@ -34,7 +34,7 @@ const initialState = {
   },
   result:{
     status: 'INIT',
-    name: '',
+    food: {},
   }
 };
 
@@ -47,7 +47,7 @@ export default function food(state,action){
     return update(state,{
       result: {
         status: {$set: action.status},
-        name: {$set: action.name},
+        food: {$set: action.food},
       }
     });
   case types.GET_FOODS:

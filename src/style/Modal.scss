@@ -1,0 +1,69 @@
+@import 'util/animation.scss';
+@import 'util/color.scss';
+@import 'util/flex.scss';
+@import 'util/centerer.scss';
+@import 'util/boxshadow.scss';
+.modalContainer{
+  position: fixed;
+  z-index: 999;
+  background: white;
+  width: 50%;
+  @media screen and (max-width: 999px){
+    width: 90%;
+  }
+  max-height: calc(100% - 100px);
+  overflow: auto;
+  opacity: 0;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  visibility: hidden;
+  @include boxShadowBottomRightThinLighter;
+  transition: top 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+.modalContainer-active{
+  top: 50%;
+  opacity: 1;
+  visibility: visible;
+}
+.modalInnerContainer{
+  @include flexbox;
+  @include flex-direction(column);
+}
+
+.modalHeader{
+  @include flex-1-1;
+  @include centererFlex(false,true);
+  height: 60px;
+  font-size: 24px;
+  font-family: 'Hanna','Ubuntu',sans-serif;
+  font-weight: 600;
+  background: $light-red;
+  color: white;
+  padding: 5px;
+  div{
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    z-index: 1;
+  }
+  a{
+    width: 100%;
+    text-align: right;
+    margin-right: 5px;
+    z-index: 3;
+    svg{
+      &:hover{
+        cursor: pointer;
+      }
+    }
+  }
+}
+.modalContent{
+  @include flex-1-0;
+}
+
+.modalFooter{
+  @include flex-1-1;
+}

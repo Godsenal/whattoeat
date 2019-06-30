@@ -9,9 +9,6 @@ router.get('/all',function(req, res){
     if(err){
       return res.status(500).send({error: 'database error'});
     }
-    if(foods.length == 0){
-      return res.status(400).json({code: '1', error: 'CANNOT FIND ANY FOOD'});
-    }
     res.json({foods});
   });
 });
@@ -33,9 +30,6 @@ router.get('/tag/:tag',function(req,res){
     if(err){
       return res.status(500).send({error: 'database error'});
     }
-    if(foods.length == 0){
-      return res.status(400).json({code: '1', error: 'CANNOT FIND ANY FOOD'});
-    }
     res.json({foods});
   });
 });
@@ -44,9 +38,6 @@ router.post('/tags',function(req, res){
   Foods.find({tags: {$all: req.body.tags}}, function(err, foods){
     if(err){
       return res.status(500).send({error: 'database error'});
-    }
-    if(foods.length == 0){
-      return res.status(400).json({code: '1', error: 'CANNOT FIND ANY FOOD'});
     }
     res.json({foods});
   });

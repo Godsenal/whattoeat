@@ -10,18 +10,21 @@
 }
 
 .startButton{
-  width: 30%;
+  @media screen and (min-width: 1000px){
+    font-size: 32px;
+    width: 35%;
+  }
+  @media screen and (max-width: 999px){
+    font-size: 26px;
+    width: 50%;
+  }
+  
   padding: 20px;
   margin: auto;
   position: relative;
   font-family: "Hanna", "Ubuntu", sans-serif;
   @include boxShadowBottomRightThinLighter;
-  @media screen and (min-width: 1000px){
-    font-size: 32px;
-  }
-  @media screen and (max-width: 999px){
-    font-size: 26px;
-  }
+  
   @include button-fill($light-red);
   
   transition: padding 0.3s ease-in-out, bottom 0.3s ease-in-out;
